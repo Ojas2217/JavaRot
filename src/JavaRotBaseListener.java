@@ -161,32 +161,37 @@ public class JavaRotBaseListener implements JavaRotListener {
 	@Override public void exitVariableDeclaration(JavaRotParser.VariableDeclarationContext ctx) {
 		String type = ctx.type().getFirst().getText();
 		String varName = ctx.IDENTIFIER().getText();
-		String value = ctx.expression().getFirst().getText();
+		Object value;
+		if(ctx.expression().isEmpty()) value = getDefaultValue(type);
+		else value = currentScope.get(ctx.expression().getFirst().getText())!=null?currentScope.get(ctx.expression().getFirst().getText()):ctx.expression().getFirst().getText();
 		if(value==null)throw new RuntimeException("Invalid value");
 		switch(type){
 			case "tuah"->{
 				try{
-					currentScope.put(varName, Double.parseDouble(value));
+					currentScope.put(varName, value);
 				}catch(NumberFormatException e){
 					throw new RuntimeException("Invalid value");
 				}
 			}
 			case "ong"->{
-				Boolean val = value.equals("fr");
+				Boolean val =value.equals("fr")||value.equals(true);
 				currentScope.put(varName, val);
 			}
 			case "Skibdi"->currentScope.put(varName, value);
 			case "tax"->{
 				try {
-					currentScope.put(varName, Integer.parseInt(value));
+					currentScope.put(varName, value);
 				}catch (NumberFormatException e){
 					System.out.println("Invalid value");
 				}
 			}
-			case "chat"->currentScope.put(varName, value.charAt(0));
+			case "chat"->{
+				String s = (String)value;
+				currentScope.put(varName, s.charAt(0));
+			}
 			default ->throw new RuntimeException("Invalid type");
 		}
-
+		System.out.println(varName + " " +currentScope.get(varName));
 	}
 	/**
 	 * {@inheritDoc}
@@ -204,29 +209,30 @@ public class JavaRotBaseListener implements JavaRotListener {
 	@Override public void exitAssignment(JavaRotParser.AssignmentContext ctx) {
 		String varName = ctx.IDENTIFIER().getText();
 		if(!currentScope.containsKey(varName))throw new RuntimeException("Invalid scope or The variable has not been declared yet");
-		String val = ctx.expression().literal().getText();
-		if(val==null)throw new RuntimeException("Invalid value");
+		Object val;
 		String type = currentScope.get(varName).getClass().getSimpleName();
+		if(ctx.expression().isEmpty()) val = getDefaultValue(type);
+		else val = ctx.expression().literal()!=null?ctx.expression().literal().getText():currentScope.get(ctx.expression().getText());
+
+		if(val==null)throw new RuntimeException("Invalid value");
+
 		switch(type){
-			case "Integer"->{
+			case "Integer","Double"->{
 				try{
-					currentScope.replace(varName, Integer.parseInt(val));
-				}catch (NumberFormatException e){
-					System.out.println("Invalid value");
-				}
-			}
-			case "Double"->{
-				try{
-					currentScope.replace(varName, Double.parseDouble(val));
+					currentScope.replace(varName, val);
 				}catch (NumberFormatException e){
 					System.out.println("Invalid value");
 				}
 			}
 			case "Boolean"->currentScope.replace(varName, val.equals("fr"));
 			case "String"->currentScope.replace(varName, val);
-			case "Character"->currentScope.replace(varName, val.charAt(0));
+			case "Character"->{
+				String v = (String)(val);
+				currentScope.replace(varName, v.charAt(0));
+			}
 			default ->throw new RuntimeException("Invalid variable name");
 		}
+		System.out.println(varName + " " +currentScope.get(varName));
 	}
 	/**
 	 * {@inheritDoc}
@@ -317,7 +323,6 @@ public class JavaRotBaseListener implements JavaRotListener {
 	 */
 	@Override public void exitExpression(JavaRotParser.ExpressionContext ctx) {
 
-
 	}
 	/**
 	 * {@inheritDoc}
@@ -331,7 +336,19 @@ public class JavaRotBaseListener implements JavaRotListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitLiteral(JavaRotParser.LiteralContext ctx) {
-
+		if (ctx.TAX_LITERAL() != null) {
+			values.put(ctx, Integer.parseInt(ctx.getText()));
+		} else if (ctx.ONG_LITERAL() != null) {
+			values.put(ctx, ctx.getText().equals("fr"));
+		} else if (ctx.SKIBIDI_LITERAL() != null) {
+			String text = ctx.getText();
+			values.put(ctx, text.substring(1, text.length() - 1));
+		} else if (ctx.CHAT_LITERAL() != null) {
+			String text = ctx.getText();
+			values.put(ctx, text.charAt(1));
+		} else if (ctx.TUAH_LITERAL() != null) {
+			values.put(ctx, Double.parseDouble(ctx.getText()));
+		}
 	}
 	/**
 	 * {@inheritDoc}
@@ -447,56 +464,16 @@ public class JavaRotBaseListener implements JavaRotListener {
 	 */
 	@Override public void visitErrorNode(ErrorNode node) { }
 
-	private Object evaluateExpression(JavaRotParser.ExpressionContext ctx) {
-		if (ctx.IDENTIFIER() != null) {
-			return currentScope.getOrDefault(ctx.IDENTIFIER().getText(), null);
-		} else if (ctx.literal() != null) {
-			return evaluateLiteral(ctx.literal());
-		} else if (ctx.operator() != null) {
-			Object left = evaluateExpression(ctx.expression(0));
-			Object right = evaluateExpression(ctx.expression(1));
-			return applyOperator(left, right, ctx.operator().getText());
-		} else if (ctx.getChildCount() == 3 && ctx.getChild(0).getText().equals("(")) {
-			return evaluateExpression(ctx.expression(0));
-		}
-		return null;
-	}
 
-	private Object evaluateLiteral(JavaRotParser.LiteralContext ctx) {
-		if (ctx.TAX_LITERAL() != null) {
-			return Integer.parseInt(ctx.TAX_LITERAL().getText());
-		} else if (ctx.ONG_LITERAL() != null) {
-			return ctx.ONG_LITERAL().getText().equals("fr");
-		} else if (ctx.SKIBIDI_LITERAL() != null) {
-			return ctx.SKIBIDI_LITERAL().getText().replaceAll("\"", "");
-		} else if (ctx.CHAT_LITERAL() != null) {
-			return ctx.CHAT_LITERAL().getText().charAt(1);
-		} else if (ctx.TUAH_LITERAL() != null) {
-			return Double.parseDouble(ctx.TUAH_LITERAL().getText());
+	private Object getDefaultValue(String type) {
+		switch(type) {
+			case "tax","Integer": return 0;
+			case "ong","Boolean": return false;
+			case "tuah","Double": return 0.0;
+			case "Skibidi","String": return "";
+			case "chat","Character": return '\0';
+			default: return null;
 		}
-		return null;
-	}
-
-	private Object applyOperator(Object left, Object right, String operator) {
-		if (left instanceof Integer && right instanceof Integer) {
-			int l = (Integer) left;
-			int r = (Integer) right;
-			return switch (operator) {
-				case "add ts" -> l + r;
-				case "sub ts" -> l - r;
-				case "mul ts" -> l * r;
-				case "div ts" -> l / r;
-				case "mod ts" -> l % r;
-				case "ts eql" -> l == r;
-				case "ts not eql" -> l != r;
-				case "ts les or eql" -> l <= r;
-				case "ts grtr or eql" -> l >= r;
-				case "ts les" -> l < r;
-				case "ts grtr" -> l > r;
-				default -> null;
-			};
-		}
-		return null;
 	}
 
 }

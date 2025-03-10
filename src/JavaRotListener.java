@@ -167,6 +167,16 @@ public interface JavaRotListener extends ParseTreeListener {
 	 */
 	void exitReturnStatement(JavaRotParser.ReturnStatementContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link JavaRotParser#printStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrintStatement(JavaRotParser.PrintStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRotParser#printStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrintStatement(JavaRotParser.PrintStatementContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link JavaRotParser#expressionStatement}.
 	 * @param ctx the parse tree
 	 */

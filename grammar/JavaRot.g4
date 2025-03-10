@@ -47,6 +47,7 @@ statement
     | breakStatement
     | continueStatement
     | tryCatchStatement
+    | printStatement
     ;
 
 fieldDeclaration
@@ -75,6 +76,10 @@ forStatement
 
 returnStatement
     : JS_GIMME_MY_MONEY expression? statementEnd
+    ;
+
+printStatement
+    : PRNT '(' argumentList? ')' statementEnd
     ;
 
 expressionStatement
@@ -161,6 +166,7 @@ GOON            : 'goon';               //for
 SYBAU           : 'sybau';              //break
 GO_ON           : 'go on';              //continue
 NEW             : 'new';                //new
+PRNT            : 'prnt';               //print
 
 // Types
 TAX             : 'tax';                //int

@@ -9,10 +9,7 @@ import org.antlr.v4.runtime.tree.ParseTreeProperty;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.io.IOException;
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class provides an empty implementation of {@link JavaRotListener},
@@ -163,31 +160,29 @@ public class JavaRotBaseListener implements JavaRotListener {
 		String varName = ctx.IDENTIFIER().getText();
 		Object value;
 		if(ctx.expression().isEmpty()) value = getDefaultValue(type);
-		else value = currentScope.get(ctx.expression().getFirst().getText())!=null?currentScope.get(ctx.expression().getFirst().getText()):ctx.expression().getFirst().getText();
+		else value = values.get(ctx.expression(0));
 		if(value==null)throw new RuntimeException("Invalid value");
 		switch(type){
 			case "tuah"->{
-				try{
+					if (!(value instanceof Double)) throw new RuntimeException("type mismatch error");
 					currentScope.put(varName, value);
-				}catch(NumberFormatException e){
-					throw new RuntimeException("Invalid value");
-				}
 			}
 			case "ong"->{
-				Boolean val =value.equals("fr")||value.equals(true);
-				currentScope.put(varName, val);
+				if (!(value instanceof Boolean)) throw new RuntimeException("type mismatch error");
+				currentScope.put(varName, value);
 			}
-			case "Skibdi"->currentScope.put(varName, value);
+			case "Skibdi"->{
+				if (!(value instanceof String)) throw new RuntimeException("type mismatch error");
+				currentScope.put(varName, value);
+			}
 			case "tax"->{
-				try {
-					currentScope.put(varName, value);
-				}catch (NumberFormatException e){
-					System.out.println("Invalid value");
-				}
+				if (!(value instanceof Integer)) throw new RuntimeException("type mismatch error");
+				currentScope.put(varName, value);
+
 			}
 			case "chat"->{
-				String s = (String)value;
-				currentScope.put(varName, s.charAt(0));
+				if (!(value instanceof Character)) throw new RuntimeException("type mismatch error");
+				currentScope.put(varName, value);
 			}
 			default ->throw new RuntimeException("Invalid type");
 		}
@@ -212,26 +207,33 @@ public class JavaRotBaseListener implements JavaRotListener {
 		Object val;
 		String type = currentScope.get(varName).getClass().getSimpleName();
 		if(ctx.expression().isEmpty()) val = getDefaultValue(type);
-		else val = ctx.expression().literal()!=null?ctx.expression().literal().getText():currentScope.get(ctx.expression().getText());
-
+		else val = values.get(ctx.expression());
 		if(val==null)throw new RuntimeException("Invalid value");
-
 		switch(type){
-			case "Integer","Double"->{
-				try{
-					currentScope.replace(varName, val);
-				}catch (NumberFormatException e){
-					System.out.println("Invalid value");
-				}
+			case "Double"->{
+				if (!(val instanceof Double)) throw new RuntimeException("type mismatch error");
+				currentScope.replace(varName, val);
 			}
-			case "Boolean"->currentScope.replace(varName, val.equals("fr"));
-			case "String"->currentScope.replace(varName, val);
+			case "Boolean"->{
+				if (!(val instanceof Boolean)) throw new RuntimeException("type mismatch error");
+				currentScope.replace(varName, val);
+			}
+			case "String"->{
+				if (!(val instanceof String)) throw new RuntimeException("type mismatch error");
+				currentScope.replace(varName, val);
+			}
+			case "Integer"->{
+				if (!(val instanceof Integer)) throw new RuntimeException("type mismatch error");
+				currentScope.replace(varName, val);
+
+			}
 			case "Character"->{
-				String v = (String)(val);
-				currentScope.replace(varName, v.charAt(0));
+				if (!(val instanceof Character)) throw new RuntimeException("type mismatch error");
+				currentScope.replace(varName, val);
 			}
-			default ->throw new RuntimeException("Invalid variable name");
+			default ->throw new RuntimeException("Invalid type");
 		}
+
 		System.out.println(varName + " " +currentScope.get(varName));
 	}
 	/**
@@ -296,7 +298,7 @@ public class JavaRotBaseListener implements JavaRotListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitPrintStatement(JavaRotParser.PrintStatementContext ctx) {
-
+		System.out.println(values.get(ctx.argumentList().expression(0)));
 	}
 	/**
 	 * {@inheritDoc}
@@ -315,14 +317,34 @@ public class JavaRotBaseListener implements JavaRotListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpression(JavaRotParser.ExpressionContext ctx) { }
+	@Override public void enterExpression(JavaRotParser.ExpressionContext ctx) {
+
+	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitExpression(JavaRotParser.ExpressionContext ctx) {
-
+		if (ctx.literal() != null) {
+			Object value = values.get(ctx.literal());
+			values.put(ctx, value);
+		}
+		else if (ctx.IDENTIFIER() != null) {
+			String varName = ctx.IDENTIFIER().getText();
+			Object value = currentScope.get(varName);
+			if (value == null) {
+				throw new RuntimeException("Undefined variable: " + varName);
+			}
+			values.put(ctx, value);
+		}
+		else if (ctx.operator() != null) {
+			Object left = values.get(ctx.expression(0));
+			Object right = values.get(ctx.expression(1));
+			String op = ctx.operator().getText();
+			Object result = evaluate(left, op, right);
+			values.put(ctx, result);
+		}
 	}
 	/**
 	 * {@inheritDoc}
@@ -342,10 +364,10 @@ public class JavaRotBaseListener implements JavaRotListener {
 			values.put(ctx, ctx.getText().equals("fr"));
 		} else if (ctx.SKIBIDI_LITERAL() != null) {
 			String text = ctx.getText();
-			values.put(ctx, text.substring(1, text.length() - 1));
+			values.put(ctx, text);
 		} else if (ctx.CHAT_LITERAL() != null) {
 			String text = ctx.getText();
-			values.put(ctx, text.charAt(1));
+			values.put(ctx, text.charAt(0));
 		} else if (ctx.TUAH_LITERAL() != null) {
 			values.put(ctx, Double.parseDouble(ctx.getText()));
 		}
@@ -464,16 +486,128 @@ public class JavaRotBaseListener implements JavaRotListener {
 	 */
 	@Override public void visitErrorNode(ErrorNode node) { }
 
+	private Object evaluate(Object left, String op, Object right) {
+		switch(op) {
+			case "add ts" -> {
+				if (left instanceof String || right instanceof String) {
+					return left.toString() + right.toString();
+				}
+				if (left instanceof Number && right instanceof Number) {
+					if (left instanceof Integer && right instanceof Integer) {
+						return (Integer) left + (Integer) right;
+					}
+					double l = ((Number) left).doubleValue();
+					double r = ((Number) right).doubleValue();
+					return l + r;
+				}
+				throw new RuntimeException("Invalid operands for add");
+			}
 
-	private Object getDefaultValue(String type) {
-		switch(type) {
-			case "tax","Integer": return 0;
-			case "ong","Boolean": return false;
-			case "tuah","Double": return 0.0;
-			case "Skibidi","String": return "";
-			case "chat","Character": return '\0';
-			default: return null;
+			case "sub ts" -> {
+				checkNumberOperands(left, right);
+				if (left instanceof Integer && right instanceof Integer) {
+					return (Integer) left - (Integer) right;
+				}
+				double l = ((Number) left).doubleValue();
+				double r = ((Number) right).doubleValue();
+				return l - r;
+			}
+
+			case "mul ts" -> {
+				checkNumberOperands(left, right);
+				if (left instanceof Integer && right instanceof Integer) {
+					return (Integer) left * (Integer) right;
+				}
+				double l = ((Number) left).doubleValue();
+				double r = ((Number) right).doubleValue();
+				return l * r;
+			}
+
+			case "div ts" -> {
+				checkNumberOperands(left, right);
+				if (left instanceof Integer && right instanceof Integer) {
+					return (Integer) left / (Integer) right; // Integer division
+				}
+				double l = ((Number) left).doubleValue();
+				double r = ((Number) right).doubleValue();
+				return l / r;
+			}
+
+			case "mod ts" -> {
+				checkNumberOperands(left, right);
+				if (left instanceof Integer && right instanceof Integer) {
+					return (Integer) left % (Integer) right;
+				}
+				double l = ((Number) left).doubleValue();
+				double r = ((Number) right).doubleValue();
+				return l % r;
+			}
+
+			case "ts eql" -> {
+				if (left instanceof Number && right instanceof Number) {
+					return ((Number) left).doubleValue() == ((Number) right).doubleValue();
+				}
+				return Objects.equals(left, right);
+			}
+
+			case "ts not eql" -> {
+				return !(Boolean) evaluate(left, "ts eql", right);
+			}
+
+			case "ts grtr or eql" -> {
+				checkNumberOperands(left, right);
+				return ((Number) left).doubleValue() >= ((Number) right).doubleValue();
+			}
+
+			case "ts les or eql" -> {
+				checkNumberOperands(left, right);
+				return ((Number) left).doubleValue() <= ((Number) right).doubleValue();
+			}
+
+			case "ts les" -> {
+				checkNumberOperands(left, right);
+				return ((Number) left).doubleValue() < ((Number) right).doubleValue();
+			}
+
+			case "ts grtr" -> {
+				checkNumberOperands(left, right);
+				return ((Number) left).doubleValue() > ((Number) right).doubleValue();
+			}
+
+			case "nd" -> {
+				if(left instanceof Boolean && right instanceof Boolean) {
+					boolean l = (Boolean) left;
+					boolean r = (Boolean) right;
+					return l && r;
+				}
+				throw new RuntimeException("Invalid operands for and");
+			}
+			case "or" -> {
+				if(left instanceof Boolean && right instanceof Boolean) {
+					boolean l = (Boolean) left;
+					boolean r = (Boolean) right;
+					return l || r;
+				}
+				throw new RuntimeException("Invalid operands for and");
+			}
+			default -> throw new RuntimeException("Unsupported operator: " + op);
 		}
+	}
+
+	private void checkNumberOperands(Object left, Object right) {
+		if (!(left instanceof Number && right instanceof Number)) {
+			throw new RuntimeException("Numeric operands required");
+		}
+	}
+	private Object getDefaultValue(String type) {
+        return switch (type) {
+            case "tax", "Integer" -> 0;
+            case "ong", "Boolean" -> false;
+            case "tuah", "Double" -> 0.0;
+            case "Skibidi", "String" -> "";
+            case "chat", "Character" -> '\0';
+            default -> null;
+        };
 	}
 
 }

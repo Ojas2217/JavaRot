@@ -156,36 +156,62 @@ public class JavaRotBaseListener implements JavaRotListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitVariableDeclaration(JavaRotParser.VariableDeclarationContext ctx) {
-		String type = ctx.type().getFirst().getText();
+		String baseType = determineBaseType(ctx.type().getFirst());
+		boolean isArray = isArrayType(ctx.type().getFirst());
+		String type = determineType(ctx.type().getFirst());
 		String varName = ctx.IDENTIFIER().getText();
 		Object value;
-		if(ctx.expression().isEmpty()) value = getDefaultValue(type);
-		else value = values.get(ctx.expression(0));
-		if(value==null)throw new RuntimeException("Invalid value");
-		switch(type){
-			case "tuah"->{
-					if (!(value instanceof Double)) throw new RuntimeException("type mismatch error");
-					currentScope.put(varName, value);
-			}
-			case "ong"->{
-				if (!(value instanceof Boolean)) throw new RuntimeException("type mismatch error");
-				currentScope.put(varName, value);
-			}
-			case "Skibdi"->{
-				if (!(value instanceof String)) throw new RuntimeException("type mismatch error");
-				currentScope.put(varName, value);
-			}
-			case "tax"->{
-				if (!(value instanceof Integer)) throw new RuntimeException("type mismatch error");
-				currentScope.put(varName, value);
+		if(isArray){
+			if (ctx.expression() != null && !ctx.expression().isEmpty()) {
+				// Case 1: {1, 2, 3}
+				if (ctx.expression().get(0).getChildCount() > 0 &&
+						ctx.expression().get(0).getChild(0) instanceof JavaRotParser.LiteralContext) {
+					int i =0;
+					List<Object> elements = new ArrayList<>();
+					while(ctx.expression(i)!=null && ctx.expression(i).getChild(0) instanceof JavaRotParser.LiteralContext){
+						elements.add(values.get(ctx.expression(i).getChild(0)));
+						i++;
+					}
 
+					value = createArray(baseType, elements);
+					currentScope.put(varName, value);
+				}
+				// Case 2: new type[size]
+				else if (ctx.expression(0).NEW() != null) {
+					int size = (Integer) values.get(ctx.expression(0).expression(0).literal());
+					value = createArray(baseType, size);
+					currentScope.put(varName, value);
+				}
 			}
-			case "chat"->{
-				if (!(value instanceof Character)) throw new RuntimeException("type mismatch error");
-				currentScope.put(varName, value);
+		}else {
+				if (ctx.expression().isEmpty()) value = getDefaultValue(type);
+				else value = values.get(ctx.expression(0));
+				if (value == null) throw new RuntimeException("Invalid value");
+				switch (type) {
+					case "tuah" -> {
+						if (!(value instanceof Double)) throw new RuntimeException("type mismatch error");
+						currentScope.put(varName, value);
+					}
+					case "ong" -> {
+						if (!(value instanceof Boolean)) throw new RuntimeException("type mismatch error");
+						currentScope.put(varName, value);
+					}
+					case "Skibidi" -> {
+						if (!(value instanceof String)) throw new RuntimeException("type mismatch error");
+						currentScope.put(varName, value);
+					}
+					case "tax" -> {
+						if (!(value instanceof Integer)) throw new RuntimeException("type mismatch error");
+						currentScope.put(varName, value);
+
+					}
+					case "chat" -> {
+						if (!(value instanceof Character)) throw new RuntimeException("type mismatch error");
+						currentScope.put(varName, value);
+					}
+					default -> throw new RuntimeException("Invalid type");
+				}
 			}
-			default ->throw new RuntimeException("Invalid type");
-		}
 		System.out.println(varName + " " +currentScope.get(varName));
 	}
 	/**
@@ -298,7 +324,9 @@ public class JavaRotBaseListener implements JavaRotListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitPrintStatement(JavaRotParser.PrintStatementContext ctx) {
-		System.out.println(values.get(ctx.argumentList().expression(0)));
+		Object toPrint = values.get(ctx.argumentList().expression(0));
+		if(toPrint instanceof  String && ((String) toPrint).charAt(0)=='"') toPrint = ((String) toPrint).substring(1,((String) toPrint).length()-1);
+		System.out.println(toPrint);
 	}
 	/**
 	 * {@inheritDoc}
@@ -326,24 +354,105 @@ public class JavaRotBaseListener implements JavaRotListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitExpression(JavaRotParser.ExpressionContext ctx) {
-		if (ctx.literal() != null) {
-			Object value = values.get(ctx.literal());
-			values.put(ctx, value);
+		if (ctx.IDENTIFIER() != null && ctx.argumentList() != null) {
+			String methodName = ctx.IDENTIFIER().getText();
+			List<Object> args = new ArrayList<>();
+
+			if (ctx.argumentList() != null) {
+				for (JavaRotParser.ExpressionContext argCtx : ctx.argumentList().expression()) {
+					args.add(values.get(argCtx));
+				}
+			}
+			//Update this after implementing method declaration, use a map to store method names
+			if ("prnt".equals(methodName)) {
+			} else {
+				throw new RuntimeException("Undefined method: " + methodName);
+			}
 		}
-		else if (ctx.IDENTIFIER() != null) {
+		else if (ctx.NEW() != null) {
+			String type = determineType(ctx.type());
+			Object sizeObj = values.get(ctx.expression().getFirst());
+
+			if (!(sizeObj instanceof Integer)) {
+				throw new RuntimeException("Array size must be an integer");
+			}
+			int size = (Integer) sizeObj;
+			Object array = switch (type) {
+				case "tax" -> new Integer[size];
+				case "tuah" -> new Double[size];
+				case "Skibidi" -> new String[size];
+				case "ong" -> new Boolean[size];
+				case "chat" -> new Character[size];
+				default -> throw new RuntimeException("Unsupported array type: " + type);
+			};
+
+			values.put(ctx, array);
+		}
+		else if (ctx.TS_NT() != null) {
+			Object value = values.get(ctx.expression().get(0));
+			if (!(value instanceof Boolean)) {
+				throw new RuntimeException("TS_NT requires boolean operand");
+			}
+			values.put(ctx, !(Boolean) value);
+		}
+		else if (ctx.LONG_AHH() != null || ctx.SMALL_AHH() != null) {
 			String varName = ctx.IDENTIFIER().getText();
 			Object value = currentScope.get(varName);
+
 			if (value == null) {
 				throw new RuntimeException("Undefined variable: " + varName);
 			}
+			if (!(value instanceof Integer)) {
+				throw new RuntimeException("Increment/decrement requires integer variable");
+			}
+
+			int original = (Integer) value;
+			int delta = ctx.LONG_AHH() != null ? 1 : -1;
+			currentScope.replace(varName, original + delta);
+			values.put(ctx, original);
+		}
+		else if (ctx.getChildCount() == 4 && ctx.getChild(1).getText().equals("[")) {
+			Object array = values.get(ctx.expression(0));
+			Object indexObj = values.get(ctx.expression(1));
+
+			if (!(indexObj instanceof Integer)) {
+				throw new RuntimeException("Array index must be an integer");
+			}
+			int index = (Integer) indexObj;
+			Object value = switch (array) {
+				case Integer[] arr -> arr[index];
+				case Double[] arr -> arr[index];
+				case String[] arr -> arr[index];
+				case Boolean[] arr -> arr[index];
+				case Character[] arr -> arr[index];
+				default -> throw new RuntimeException("Invalid array type");
+			};
+
 			values.put(ctx, value);
+		}
+		else if (ctx.getChildCount() == 3 && ctx.getChild(0).getText().equals("(")) {
+			values.put(ctx, values.get(ctx.expression(0)));
 		}
 		else if (ctx.operator() != null) {
 			Object left = values.get(ctx.expression(0));
 			Object right = values.get(ctx.expression(1));
 			String op = ctx.operator().getText();
-			Object result = evaluate(left, op, right);
-			values.put(ctx, result);
+			values.put(ctx, evaluate(left, op, right));
+		}
+		else if (ctx.literal() != null) {
+			values.put(ctx, values.get(ctx.literal()));
+		}
+		else if (ctx.IDENTIFIER() != null) {
+			String varName = ctx.IDENTIFIER().getText();
+			Object value = currentScope.get(varName);
+
+			if (value == null) {
+				throw new RuntimeException("Undefined variable: " + varName);
+			}
+			values.put(ctx, value);
+		}
+		else {
+			throw new RuntimeException("Unsupported expression: " + ctx.getText());
 		}
 	}
 	/**
@@ -490,7 +599,9 @@ public class JavaRotBaseListener implements JavaRotListener {
 		switch(op) {
 			case "add ts" -> {
 				if (left instanceof String || right instanceof String) {
-					return left.toString() + right.toString();
+					String l = ((String)left).charAt(0)=='"'?left.toString().substring(1,((String)left).length()-1):left.toString();
+					String r = ((String)right).charAt(0)=='"'?right.toString().substring(1,((String)right).length()-1):right.toString();
+					return  l+r;
 				}
 				if (left instanceof Number && right instanceof Number) {
 					if (left instanceof Integer && right instanceof Integer) {
@@ -610,4 +721,68 @@ public class JavaRotBaseListener implements JavaRotListener {
         };
 	}
 
+	private String determineType(JavaRotParser.TypeContext ctx) {
+		StringBuilder type = new StringBuilder();
+		if (ctx.TAX() != null) type.append("tax");
+		else if (ctx.ONG() != null) type.append("ong");
+		else if (ctx.TUAH() != null) type.append("tuah");
+		else if (ctx.SKIBIDI() != null) type.append("Skibidi");
+		else if (ctx.CHAT() != null) type.append("chat");
+		else if (ctx.GONE() != null) type.append("gone");
+		else if (ctx.IDENTIFIER() != null) type.append(ctx.IDENTIFIER().getText());
+
+		return type.toString();
+	}
+	private String determineBaseType(JavaRotParser.TypeContext typeCtx) {
+		if (typeCtx.TAX() != null) return "tax";
+		if (typeCtx.ONG() != null) return "ong";
+		if (typeCtx.TUAH() != null) return "tuah";
+		if (typeCtx.SKIBIDI() != null) return "Skibidi";
+		if (typeCtx.CHAT() != null) return "chat";
+		return typeCtx.IDENTIFIER().getText();
+	}
+
+	private boolean isArrayType(JavaRotParser.TypeContext typeCtx) {
+		return typeCtx.getChildCount() > 1 && typeCtx.getChild(1).getText().equals("[");
+	}
+
+	private Object createArray(String baseType, List<Object> elements) {
+		switch (baseType) {
+			case "tax":
+				return elements.stream()
+						.map(o -> (Integer) o)
+						.toArray(Integer[]::new);
+			case "ong":
+				return elements.stream()
+						.map(o -> (Boolean) o)
+						.toArray(Boolean[]::new);
+			case "tuah":
+				return elements.stream()
+						.map(o -> (Double) o)
+						.toArray(Double[]::new);
+			case "Skibidi":
+				return elements.stream()
+						.map(Object::toString)
+						.toArray(String[]::new);
+			case "chat":
+				return elements.stream()
+						.map(o -> (Character) o)
+						.toArray(Character[]::new);
+			default:
+				throw new RuntimeException("Unsupported array type: " + baseType);
+		}
+	}
+
+	private Object createArray(String baseType, int size) {
+		if (size < 0) throw new RuntimeException("Negative array size");
+
+		switch (baseType) {
+			case "tax": return new Integer[size];
+			case "ong": return new Boolean[size];
+			case "tuah": return new Double[size];
+			case "Skibidi": return new String[size];
+			case "chat": return new Character[size];
+			default: throw new RuntimeException("Unsupported array type: " + baseType);
+		}
+	}
 }

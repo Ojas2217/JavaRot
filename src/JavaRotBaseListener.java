@@ -1,14 +1,10 @@
 package src;// Generated from grammar/JavaRot.g4 by ANTLR 4.13.2
 
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
+
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 import org.antlr.v4.runtime.tree.TerminalNode;
-
-import java.io.IOException;
 import java.util.*;
 
 /**
@@ -22,6 +18,21 @@ public class JavaRotBaseListener implements JavaRotListener {
 	private ParseTreeProperty<Object> values = new ParseTreeProperty<>();
 	private Deque<Map<String, Object>> scopes = new ArrayDeque<>();
 	private Map<String, Object> currentScope = new HashMap<>();
+	private static final Map<String, Integer> PRECEDENCE = Map.ofEntries(
+			Map.entry("mul ts", 4),
+			Map.entry("div ts", 4),
+			Map.entry("mod ts", 4),
+			Map.entry("add ts", 3),
+			Map.entry("sub ts", 3),
+			Map.entry("ts les", 2),
+			Map.entry("ts grtr", 2),
+			Map.entry("ts les or eql", 2),
+			Map.entry("ts grtr or eql", 2),
+			Map.entry("ts eql", 1),
+			Map.entry("ts not eql", 1),
+			Map.entry("nd", 0),
+			Map.entry("or", -1)
+	);
 	/**
 	 * {@inheritDoc}
 	 *
@@ -434,10 +445,9 @@ public class JavaRotBaseListener implements JavaRotListener {
 			values.put(ctx, values.get(ctx.expression(0)));
 		}
 		else if (ctx.operator() != null) {
-			Object left = values.get(ctx.expression(0));
-			Object right = values.get(ctx.expression(1));
-			String op = ctx.operator().getText();
-			values.put(ctx, evaluate(left, op, right));
+			List<Object> tokens = flattenExpression(ctx);
+			Object result = evaluateWithPrecedence(tokens);
+			values.put(ctx, result);
 		}
 		else if (ctx.literal() != null) {
 			values.put(ctx, values.get(ctx.literal()));
@@ -784,5 +794,64 @@ public class JavaRotBaseListener implements JavaRotListener {
 			case "chat": return new Character[size];
 			default: throw new RuntimeException("Unsupported array type: " + baseType);
 		}
+	}
+
+	private List<Object> flattenExpression(JavaRotParser.ExpressionContext ctx) {
+		List<Object> tokens = new ArrayList<>();
+		if (ctx.operator() != null) {
+			tokens.addAll(flattenExpression(ctx.expression(0)));
+			tokens.add(ctx.operator().getText());
+			tokens.addAll(flattenExpression(ctx.expression(1)));
+		} else {
+			tokens.add(values.get(ctx));
+		}
+		return tokens;
+	}
+
+	private Object evaluateWithPrecedence(List<Object> tokens) {
+		// Convert infix to postfix using Shunting Yard
+		List<Object> postfix = shuntingYard(tokens);
+		return evaluatePostfix(postfix);
+	}
+
+	// Shunting Yard Algorithm
+	private List<Object> shuntingYard(List<Object> tokens) {
+		List<Object> output = new ArrayList<>();
+		Deque<String> stack = new ArrayDeque<>();
+
+		for (Object token : tokens) {
+			if (token instanceof String op) {
+				while (!stack.isEmpty() &&
+						PRECEDENCE.get(stack.peek()) >= PRECEDENCE.get(op)) {
+					output.add(stack.pop());
+				}
+				stack.push(op);
+			} else {
+				output.add(token);
+			}
+		}
+
+		while (!stack.isEmpty()) {
+			output.add(stack.pop());
+		}
+
+		return output;
+	}
+
+	// Evaluate postfix notation
+	private Object evaluatePostfix(List<Object> postfix) {
+		Deque<Object> stack = new ArrayDeque<>();
+
+		for (Object token : postfix) {
+			if (token instanceof String op) {
+				Object right = stack.pop();
+				Object left = stack.pop();
+				stack.push(evaluate(left, op, right));
+			} else {
+				stack.push(token);
+			}
+		}
+
+		return stack.pop();
 	}
 }

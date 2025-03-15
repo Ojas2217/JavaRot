@@ -59,9 +59,11 @@ variableDeclaration
     ;
 
 assignment
-    : IDENTIFIER TS  expression statementEnd
+    : (IDENTIFIER|arrayIndex) TS  expression statementEnd
     ;
-
+arrayIndex
+    : IDENTIFIER '[' expression ']'
+    ;
 ifStatement
     : HUZZ '(' expression ')' block (BRUZZ block)?//if-else
     ;

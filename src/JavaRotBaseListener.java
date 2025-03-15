@@ -187,7 +187,7 @@ public class JavaRotBaseListener implements JavaRotListener {
 					value = createArray(baseType, elements);
 					currentScope.put(varName, value);
 				}
-				// Case 2: new type[size]
+				// Case 2: new arr[size]
 				else if (ctx.expression(0).NEW() != null) {
 					int size = (Integer) values.get(ctx.expression(0).expression(0).literal());
 					value = createArray(baseType, size);
@@ -195,34 +195,34 @@ public class JavaRotBaseListener implements JavaRotListener {
 				}
 			}
 		}else {
-				if (ctx.expression().isEmpty()) value = getDefaultValue(type);
-				else value = values.get(ctx.expression(0));
-				if (value == null) throw new RuntimeException("Invalid value");
-				switch (type) {
-					case "tuah" -> {
-						if (!(value instanceof Double)) throw new RuntimeException("type mismatch error");
-						currentScope.put(varName, value);
-					}
-					case "ong" -> {
-						if (!(value instanceof Boolean)) throw new RuntimeException("type mismatch error");
-						currentScope.put(varName, value);
-					}
-					case "Skibidi" -> {
-						if (!(value instanceof String)) throw new RuntimeException("type mismatch error");
-						currentScope.put(varName, value);
-					}
-					case "tax" -> {
-						if (!(value instanceof Integer)) throw new RuntimeException("type mismatch error");
-						currentScope.put(varName, value);
-
-					}
-					case "chat" -> {
-						if (!(value instanceof Character)) throw new RuntimeException("type mismatch error");
-						currentScope.put(varName, value);
-					}
-					default -> throw new RuntimeException("Invalid type");
+			if (ctx.expression().isEmpty()) value = getDefaultValue(type);
+			else value = values.get(ctx.expression(0));
+			if (value == null) throw new RuntimeException("Invalid value");
+			switch (type) {
+				case "tuah" -> {
+					if (!(value instanceof Double)) throw new RuntimeException("type mismatch error");
+					currentScope.put(varName, value);
 				}
+				case "ong" -> {
+					if (!(value instanceof Boolean)) throw new RuntimeException("type mismatch error");
+					currentScope.put(varName, value);
+				}
+				case "Skibidi" -> {
+					if (!(value instanceof String)) throw new RuntimeException("type mismatch error");
+					currentScope.put(varName, value);
+				}
+				case "tax" -> {
+					if (!(value instanceof Integer)) throw new RuntimeException("type mismatch error");
+					currentScope.put(varName, value);
+
+				}
+				case "chat" -> {
+					if (!(value instanceof String)) throw new RuntimeException("type mismatch error");
+					currentScope.put(varName, ((String)value).charAt(1));
+				}
+				default -> throw new RuntimeException("Invalid type");
 			}
+		}
 		System.out.println(varName + " " +currentScope.get(varName));
 	}
 	/**
@@ -239,40 +239,101 @@ public class JavaRotBaseListener implements JavaRotListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitAssignment(JavaRotParser.AssignmentContext ctx) {
-		String varName = ctx.IDENTIFIER().getText();
-		if(!currentScope.containsKey(varName))throw new RuntimeException("Invalid scope or The variable has not been declared yet");
-		Object val;
-		String type = currentScope.get(varName).getClass().getSimpleName();
-		if(ctx.expression().isEmpty()) val = getDefaultValue(type);
-		else val = values.get(ctx.expression());
-		if(val==null)throw new RuntimeException("Invalid value");
-		switch(type){
-			case "Double"->{
-				if (!(val instanceof Double)) throw new RuntimeException("type mismatch error");
-				currentScope.replace(varName, val);
-			}
-			case "Boolean"->{
-				if (!(val instanceof Boolean)) throw new RuntimeException("type mismatch error");
-				currentScope.replace(varName, val);
-			}
-			case "String"->{
-				if (!(val instanceof String)) throw new RuntimeException("type mismatch error");
-				currentScope.replace(varName, val);
-			}
-			case "Integer"->{
-				if (!(val instanceof Integer)) throw new RuntimeException("type mismatch error");
-				currentScope.replace(varName, val);
+		if(ctx.arrayIndex()!=null){
+			String varName = ctx.arrayIndex().IDENTIFIER().getText();
+			if (!currentScope.containsKey(varName)) throw new RuntimeException("Invalid scope or The variable has not been declared yet");
+			if(ctx.arrayIndex().expression().isEmpty())throw new RuntimeException("Invalid index");
+			Object index = values.get(ctx.arrayIndex().expression());
+			Object val = values.get(ctx.expression());
+			if (val == null) throw new RuntimeException("Invalid value");
+			if(!(index instanceof Integer))throw new RuntimeException("Invalid index");
+			if(!currentScope.get(varName).getClass().isArray())throw new RuntimeException("Invalid array object");
+			String typeArr = currentScope.get(varName).getClass().getSimpleName();
+			String typeVal = val.getClass().getSimpleName();
+			switch (typeArr){
+				case "Integer[]"->{
+					if(!typeVal.equals("Integer"))throw new RuntimeException("type mismatch error");
+					Integer[] arr = (Integer[])currentScope.get(varName);
+					arr[(int)index]= (int) val;
+					currentScope.replace(varName, arr);
+
+				}
+				case "Double[]"->{
+					if(!typeVal.equals("Double"))throw new RuntimeException("type mismatch error");
+					Double[] arr = (Double[])currentScope.get(varName);
+					arr[(int)index]= (double) val;
+					currentScope.replace(varName, arr);
+				}
+				case "Boolean[]"->{
+					if(!typeVal.equals("Boolean"))throw new RuntimeException("type mismatch error");
+					Boolean[] arr = (Boolean[])currentScope.get(varName);
+					arr[(int)index]= (boolean)val;
+					currentScope.replace(varName, arr);
+				}
+				case "String[]"->{
+					if(!typeVal.equals("String"))throw new RuntimeException("type mismatch error");
+					String[] arr = (String[])currentScope.get(varName);
+					arr[(int)index]= (String)val;
+					currentScope.replace(varName, arr);
+				}
+				case "Character[]"->{
+					if(!typeVal.equals("String"))throw new RuntimeException("type mismatch error");
+					Character[] arr = (Character[])currentScope.get(varName);
+					arr[(int)index]= ((String)val).charAt(1);
+					currentScope.replace(varName, arr);
+				}
+				default -> throw new RuntimeException("Invalid array type");
 
 			}
-			case "Character"->{
-				if (!(val instanceof Character)) throw new RuntimeException("type mismatch error");
-				currentScope.replace(varName, val);
+
+		}else {
+			String varName = ctx.IDENTIFIER().getText();
+			if (!currentScope.containsKey(varName))
+				throw new RuntimeException("Invalid scope or The variable has not been declared yet");
+			Object val;
+			String type = currentScope.get(varName).getClass().getSimpleName();
+			if (ctx.expression().isEmpty())throw new RuntimeException("No value assigned");
+			else val = values.get(ctx.expression());
+			if (val == null) throw new RuntimeException("Invalid value");
+			switch (type) {
+				case "Double" -> {
+					if (!(val instanceof Double)) throw new RuntimeException("type mismatch error");
+					currentScope.replace(varName, val);
+				}
+				case "Boolean" -> {
+					if (!(val instanceof Boolean)) throw new RuntimeException("type mismatch error");
+					currentScope.replace(varName, val);
+				}
+				case "String" -> {
+					if (!(val instanceof String)) throw new RuntimeException("type mismatch error");
+					currentScope.replace(varName, val);
+				}
+				case "Integer" -> {
+					if (!(val instanceof Integer)) throw new RuntimeException("type mismatch error");
+					currentScope.replace(varName, val);
+
+				}
+				case "Character" -> {
+					if (!(val instanceof String)) throw new RuntimeException("type mismatch error");
+					currentScope.replace(varName, ((String)val).charAt(1));
+				}
+				default -> throw new RuntimeException("Invalid type");
 			}
-			default ->throw new RuntimeException("Invalid type");
+			System.out.println(varName + " " +currentScope.get(varName));
 		}
 
-		System.out.println(varName + " " +currentScope.get(varName));
 	}
+
+	/**
+	 * Enter a parse tree produced by {@link JavaRotParser#arrayIndex}.
+	 * @param ctx the parse tree
+	 */
+	@Override public void enterArrayIndex(JavaRotParser.ArrayIndexContext ctx){}
+	/**
+	 * Exit a parse tree produced by {@link JavaRotParser#arrayIndex}.
+	 * @param ctx the parse tree
+	 */
+	@Override public void  exitArrayIndex(JavaRotParser.ArrayIndexContext ctx){}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -365,15 +426,15 @@ public class JavaRotBaseListener implements JavaRotListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitExpression(JavaRotParser.ExpressionContext ctx) {
-		if (ctx.IDENTIFIER() != null && ctx.argumentList() != null) {
+		if (ctx.IDENTIFIER()!=null &&ctx.argumentList() != null) {
 			String methodName = ctx.IDENTIFIER().getText();
 			List<Object> args = new ArrayList<>();
 
-			if (ctx.argumentList() != null) {
-				for (JavaRotParser.ExpressionContext argCtx : ctx.argumentList().expression()) {
-					args.add(values.get(argCtx));
-				}
+
+			for (JavaRotParser.ExpressionContext argCtx : ctx.argumentList().expression()) {
+				args.add(values.get(argCtx));
 			}
+
 			//Update this after implementing method declaration, use a map to store method names
 			if ("prnt".equals(methodName)) {
 			} else {
@@ -486,7 +547,7 @@ public class JavaRotBaseListener implements JavaRotListener {
 			values.put(ctx, text);
 		} else if (ctx.CHAT_LITERAL() != null) {
 			String text = ctx.getText();
-			values.put(ctx, text.charAt(0));
+			values.put(ctx, text.charAt(1));
 		} else if (ctx.TUAH_LITERAL() != null) {
 			values.put(ctx, Double.parseDouble(ctx.getText()));
 		}
@@ -721,14 +782,14 @@ public class JavaRotBaseListener implements JavaRotListener {
 		}
 	}
 	private Object getDefaultValue(String type) {
-        return switch (type) {
-            case "tax", "Integer" -> 0;
-            case "ong", "Boolean" -> false;
-            case "tuah", "Double" -> 0.0;
-            case "Skibidi", "String" -> "";
-            case "chat", "Character" -> '\0';
-            default -> null;
-        };
+		return switch (type) {
+			case "tax", "Integer" -> 0;
+			case "ong", "Boolean" -> false;
+			case "tuah", "Double" -> 0.0;
+			case "Skibidi", "String" -> "";
+			case "chat", "Character" -> '\0';
+			default -> null;
+		};
 	}
 
 	private String determineType(JavaRotParser.TypeContext ctx) {

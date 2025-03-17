@@ -15,10 +15,10 @@ import java.util.*;
 @SuppressWarnings("CheckReturnValue")
 public class JavaRotBaseListener implements JavaRotListener {
 
-	private ParseTreeProperty<Object> values = new ParseTreeProperty<>();
-	private Deque<Map<String, Object>> scopes = new ArrayDeque<>();
-	private Map<String, Object> currentScope = new HashMap<>();
-	private static final Map<String, Integer> PRECEDENCE = Map.ofEntries(
+	ParseTreeProperty<Object> values = new ParseTreeProperty<>();
+    Deque<Map<String, Object>> scopes = new ArrayDeque<>();
+    Map<String, Object> currentScope = new HashMap<>();
+	static final Map<String, Integer> PRECEDENCE = Map.ofEntries(
 			Map.entry("mul ts", 4),
 			Map.entry("div ts", 4),
 			Map.entry("mod ts", 4),
@@ -345,7 +345,28 @@ public class JavaRotBaseListener implements JavaRotListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIfStatement(JavaRotParser.IfStatementContext ctx) { }
+	@Override public void exitIfStatement(JavaRotParser.IfStatementContext ctx) {
+		Object con = values.get(ctx.expression());
+		if (!(con instanceof Boolean)) {
+			throw new RuntimeException("Condition must be a boolean");
+		}
+		if ((Boolean) con) {
+			execute(ctx.block(0));
+		} else if (ctx.BRUZZ() != null) {
+			execute(ctx.block(1));
+
+		}
+	}
+
+	private void execute(JavaRotParser.BlockContext block) {
+		scopes.push(new HashMap<>(currentScope));
+		currentScope = scopes.peek();
+		for (JavaRotParser.StatementContext stmt : block.statement()) {
+			exitStatement(stmt);
+		}
+		scopes.pop();
+		currentScope = scopes.peek();
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -396,6 +417,7 @@ public class JavaRotBaseListener implements JavaRotListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitPrintStatement(JavaRotParser.PrintStatementContext ctx) {
+
 		Object toPrint = values.get(ctx.argumentList().expression(0));
 		if(toPrint instanceof  String && ((String) toPrint).charAt(0)=='"') toPrint = ((String) toPrint).substring(1,((String) toPrint).length()-1);
 		System.out.println(toPrint);
@@ -426,6 +448,7 @@ public class JavaRotBaseListener implements JavaRotListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitExpression(JavaRotParser.ExpressionContext ctx) {
+
 		if (ctx.IDENTIFIER()!=null &&ctx.argumentList() != null) {
 			String methodName = ctx.IDENTIFIER().getText();
 			List<Object> args = new ArrayList<>();
@@ -570,7 +593,10 @@ public class JavaRotBaseListener implements JavaRotListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void enterBlock(JavaRotParser.BlockContext ctx) {
+		if(!(ctx.parent instanceof JavaRotParser.IfStatementContext)&&!(ctx.parent instanceof JavaRotParser.WhileStatementContext)) {
 		scopes.push(new HashMap<>(currentScope));
+		currentScope=scopes.peek();
+		}
 	}
 	/**
 	 * {@inheritDoc}
@@ -578,7 +604,10 @@ public class JavaRotBaseListener implements JavaRotListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBlock(JavaRotParser.BlockContext ctx) {
-		currentScope = scopes.pop();
+		if(!(ctx.parent instanceof JavaRotParser.IfStatementContext)&&!(ctx.parent instanceof JavaRotParser.WhileStatementContext)) {
+			scopes.pop();
+			currentScope = scopes.peek();
+		}
 	}
 	/**
 	 * {@inheritDoc}
@@ -792,7 +821,7 @@ public class JavaRotBaseListener implements JavaRotListener {
 		};
 	}
 
-	private String determineType(JavaRotParser.TypeContext ctx) {
+	String determineType(JavaRotParser.TypeContext ctx) {
 		StringBuilder type = new StringBuilder();
 		if (ctx.TAX() != null) type.append("tax");
 		else if (ctx.ONG() != null) type.append("ong");
@@ -857,7 +886,7 @@ public class JavaRotBaseListener implements JavaRotListener {
 		}
 	}
 
-	private List<Object> flattenExpression(JavaRotParser.ExpressionContext ctx) {
+	List<Object> flattenExpression(JavaRotParser.ExpressionContext ctx) {
 		List<Object> tokens = new ArrayList<>();
 		if (ctx.operator() != null) {
 			tokens.addAll(flattenExpression(ctx.expression(0)));
@@ -869,7 +898,7 @@ public class JavaRotBaseListener implements JavaRotListener {
 		return tokens;
 	}
 
-	private Object evaluateWithPrecedence(List<Object> tokens) {
+	Object evaluateWithPrecedence(List<Object> tokens) {
 		// Convert infix to postfix using Shunting Yard
 		List<Object> postfix = shuntingYard(tokens);
 		return evaluatePostfix(postfix);

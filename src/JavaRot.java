@@ -18,11 +18,8 @@ public class JavaRot {
             JavaRotParser parser = new JavaRotParser(new CommonTokenStream(lexer));
             parser.addParseListener(new JavaRotBaseListener());
             ParseTree tree = parser.program();
-            Skipper listener = new Skipper();
-            SkipWalker walker = new SkipWalker();
-
-// Execute the program
-            walker.walk(listener, tree);
+            JavaRotBaseVisitor visitor = new JavaRotBaseVisitor();
+            visitor.visit(tree);
 //            Everything below is for debugging, will be removed later
             System.out.println(tree.toStringTree(parser));
             TreeViewer viewer = new TreeViewer(Arrays.asList(parser.getRuleNames()),tree);

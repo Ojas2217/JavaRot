@@ -159,6 +159,11 @@ public class JavaRotParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitProgram(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitProgram(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final ProgramContext program() throws RecognitionException {
@@ -275,6 +280,11 @@ public class JavaRotParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitClassDeclaration(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitClassDeclaration(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final ClassDeclarationContext classDeclaration() throws RecognitionException {
@@ -365,6 +375,11 @@ public class JavaRotParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitConstructorDeclaration(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitConstructorDeclaration(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final ConstructorDeclarationContext constructorDeclaration() throws RecognitionException {
@@ -447,6 +462,11 @@ public class JavaRotParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitMethodDeclaration(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitMethodDeclaration(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -538,6 +558,11 @@ public class JavaRotParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitParameterList(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitParameterList(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final ParameterListContext parameterList() throws RecognitionException {
@@ -602,6 +627,11 @@ public class JavaRotParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitType(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitType(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -752,6 +782,11 @@ public class JavaRotParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitEncapsulation(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitEncapsulation(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final EncapsulationContext encapsulation() throws RecognitionException {
@@ -799,6 +834,11 @@ public class JavaRotParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitModifier(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitModifier(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -881,6 +921,11 @@ public class JavaRotParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitStatement(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitStatement(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1023,6 +1068,11 @@ public class JavaRotParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitFieldDeclaration(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitFieldDeclaration(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final FieldDeclarationContext fieldDeclaration() throws RecognitionException {
@@ -1141,6 +1191,11 @@ public class JavaRotParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitVariableDeclaration(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitVariableDeclaration(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final VariableDeclarationContext variableDeclaration() throws RecognitionException {
@@ -1250,6 +1305,11 @@ public class JavaRotParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitAssignment(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitAssignment(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final AssignmentContext assignment() throws RecognitionException {
@@ -1311,6 +1371,11 @@ public class JavaRotParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitArrayIndex(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitArrayIndex(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final ArrayIndexContext arrayIndex() throws RecognitionException {
@@ -1364,6 +1429,11 @@ public class JavaRotParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitIfStatement(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitIfStatement(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1430,6 +1500,11 @@ public class JavaRotParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitWhileStatement(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitWhileStatement(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final WhileStatementContext whileStatement() throws RecognitionException {
@@ -1490,6 +1565,11 @@ public class JavaRotParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitForStatement(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitForStatement(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1578,6 +1658,11 @@ public class JavaRotParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitReturnStatement(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitReturnStatement(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final ReturnStatementContext returnStatement() throws RecognitionException {
@@ -1634,6 +1719,11 @@ public class JavaRotParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitPrintStatement(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitPrintStatement(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1694,6 +1784,11 @@ public class JavaRotParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitExpressionStatement(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitExpressionStatement(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1756,6 +1851,11 @@ public class JavaRotParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitExpression(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitExpression(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1936,6 +2036,11 @@ public class JavaRotParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitLiteral(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitLiteral(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final LiteralContext literal() throws RecognitionException {
@@ -1995,6 +2100,11 @@ public class JavaRotParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitOperator(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitOperator(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final OperatorContext operator() throws RecognitionException {
@@ -2046,6 +2156,11 @@ public class JavaRotParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitBlock(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitBlock(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2106,6 +2221,11 @@ public class JavaRotParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitArgumentList(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitArgumentList(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2176,6 +2296,11 @@ public class JavaRotParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitTryCatchStatement(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitTryCatchStatement(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2255,6 +2380,11 @@ public class JavaRotParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitBreakStatement(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitBreakStatement(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final BreakStatementContext breakStatement() throws RecognitionException {
@@ -2298,6 +2428,11 @@ public class JavaRotParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitContinueStatement(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitContinueStatement(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final ContinueStatementContext continueStatement() throws RecognitionException {
@@ -2338,6 +2473,11 @@ public class JavaRotParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitStatementEnd(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitStatementEnd(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 

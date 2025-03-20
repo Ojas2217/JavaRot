@@ -167,7 +167,6 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 				default -> throw new RuntimeException("Invalid type");
 			}
 		}
-		System.out.println(varName + " " +currentScope.get(varName));
 		return null;
 	}
 	/**
@@ -258,7 +257,7 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 				}
 				default -> throw new RuntimeException("Invalid type");
 			}
-			System.out.println(varName + " " +currentScope.get(varName));
+
 		}
 		return null;
 	}
@@ -276,7 +275,7 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitIfStatement(JavaRotParser.IfStatementContext ctx) {
-		visitChildren(ctx);
+		this.visit(ctx.expression());
 		Object con = values.get(ctx.expression());
 		if (!(con instanceof Boolean)) {
 			throw new RuntimeException("Condition must be a boolean");
@@ -375,6 +374,8 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 		}
 		else if (ctx.TS_NT() != null) {
 			Object value = values.get(ctx.expression().get(0));
+			if(value == (Integer)1) value = true;
+			if(value == (Integer)0)value = false;
 			if (!(value instanceof Boolean)) {
 				throw new RuntimeException("TS_NT requires boolean operand");
 			}

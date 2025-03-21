@@ -295,7 +295,19 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitWhileStatement(JavaRotParser.WhileStatementContext ctx) { return visitChildren(ctx); }
+	@Override public T visitWhileStatement(JavaRotParser.WhileStatementContext ctx) {
+		this.visit(ctx.expression());
+		Object con = values.get(ctx.expression());
+		if (!(con instanceof Boolean)) {
+			throw new RuntimeException("Condition must be a boolean");
+		}
+		while((Boolean) con){
+			this.visit(ctx.block());
+			this.visit(ctx.expression());
+			con = values.get(ctx.expression());
+		}
+		return null;
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -477,15 +489,17 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitBlock(JavaRotParser.BlockContext ctx) {
-		scopes.push(new HashMap<>(currentScope));
-		currentScope = scopes.peek();
-
+		if(!(ctx.getParent() instanceof JavaRotParser.WhileStatementContext)) {
+			scopes.push(new HashMap<>(currentScope));
+			currentScope = scopes.peek();
+		}
 		for (JavaRotParser.StatementContext stmt : ctx.statement()) {
 			visit(stmt);
 		}
-
-		scopes.pop();
-		currentScope = scopes.peek();
+		if(!(ctx.getParent() instanceof JavaRotParser.WhileStatementContext)){
+			scopes.pop();
+			currentScope = scopes.peek();
+		}
 		return null;
 	}
 	/**

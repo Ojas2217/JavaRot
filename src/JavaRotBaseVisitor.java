@@ -1,5 +1,6 @@
 package src;// Generated from grammar/JavaRot.g4 by ANTLR 4.13.2
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
 import java.util.*;
@@ -314,7 +315,62 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitForStatement(JavaRotParser.ForStatementContext ctx) { return visitChildren(ctx); }
+	@Override public T visitForStatement(JavaRotParser.ForStatementContext ctx) {
+		JavaRotParser.VariableDeclarationContext initVar = null;
+		JavaRotParser.ExpressionContext initExp = null;
+		JavaRotParser.ExpressionContext updateExp = null;
+		JavaRotParser.ExpressionContext conditionCtx = null;
+
+		for (int i = 0; i < ctx.getChildCount(); i++) {
+			ParseTree child = ctx.getChild(i);
+			if (child instanceof JavaRotParser.VariableDeclarationContext) {
+				initVar = (JavaRotParser.VariableDeclarationContext) child;
+			} else if (child instanceof JavaRotParser.ExpressionContext) {
+				// Position 2: init's expressionStatement (after 'GOON' and '(')
+				if (i == 3) {
+					initExp = (JavaRotParser.ExpressionContext) child;
+				}
+				// Position 3: update's expressionStatement
+				else if (i == 4) {
+					updateExp = (JavaRotParser.ExpressionContext) child;
+				}
+			} else if (child instanceof JavaRotParser.ExpressionStatementContext) {
+				// Position 4: condition expression
+				conditionCtx = ((JavaRotParser.ExpressionStatementContext)child).expression();
+			}
+		}
+		if (initVar != null) {
+			visit(initVar);
+		} else if (initExp != null) {
+			visit(initExp);
+		}
+		boolean condition = true;
+		if (conditionCtx != null) {
+			visit(conditionCtx);
+			Object condValue = values.get(conditionCtx);
+			if (!(condValue instanceof Boolean)) {
+				throw new RuntimeException("condition must be a boolean");
+			}
+			condition = (Boolean) condValue;
+		}
+		while (condition) {
+			visit(ctx.block());
+			if (updateExp != null) {
+				visit(updateExp);
+			}
+			if (conditionCtx != null) {
+				visit(conditionCtx);
+				Object condValue = values.get(conditionCtx);
+				if (!(condValue instanceof Boolean)) {
+					throw new RuntimeException("condition must be a boolean");
+				}
+				condition = (Boolean) condValue;
+			} else {
+				condition = true;
+			}
+		}
+		return null;
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -489,14 +545,14 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitBlock(JavaRotParser.BlockContext ctx) {
-		if(!(ctx.getParent() instanceof JavaRotParser.WhileStatementContext)) {
+		if(!(ctx.getParent() instanceof JavaRotParser.WhileStatementContext||ctx.getParent() instanceof JavaRotParser.ForStatementContext) ) {
 			scopes.push(new HashMap<>(currentScope));
 			currentScope = scopes.peek();
 		}
 		for (JavaRotParser.StatementContext stmt : ctx.statement()) {
 			visit(stmt);
 		}
-		if(!(ctx.getParent() instanceof JavaRotParser.WhileStatementContext)){
+		if(!(ctx.getParent() instanceof JavaRotParser.WhileStatementContext||ctx.getParent() instanceof JavaRotParser.ForStatementContext)){
 			scopes.pop();
 			currentScope = scopes.peek();
 		}

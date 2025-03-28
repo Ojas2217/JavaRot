@@ -298,11 +298,13 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 	 */
 	@Override public T visitWhileStatement(JavaRotParser.WhileStatementContext ctx) {
 		this.visit(ctx.expression());
-		Object con = values.get(ctx.expression());
-		if (!(con instanceof Boolean)) {
-			throw new RuntimeException("Condition must be a boolean");
-		}
-		while((Boolean) con){
+
+		while(true){
+			Object con = values.get(ctx.expression());
+			if (!(con instanceof Boolean)) {
+				throw new RuntimeException("Condition must be a boolean");
+			}
+			if(!((Boolean) con))break;
 			this.visit(ctx.block());
 			this.visit(ctx.expression());
 			con = values.get(ctx.expression());
@@ -597,10 +599,21 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 	private Object evaluate(Object left, String op, Object right) {
 		switch(op) {
 			case "add ts" -> {
-				if (left instanceof String || right instanceof String) {
+				if (left instanceof String && right instanceof String) {
 					String l = ((String)left).charAt(0)=='"'?left.toString().substring(1,((String)left).length()-1):left.toString();
 					String r = ((String)right).charAt(0)=='"'?right.toString().substring(1,((String)right).length()-1):right.toString();
 					return  l+r;
+				}
+				if(left instanceof String && right instanceof Number){
+					String l = ((String)left).charAt(0)=='"'?left.toString().substring(1,((String)left).length()-1):left.toString();
+					String r = right.toString();
+					return  l+r;
+				}
+				if(left instanceof Number && right instanceof String){
+					String r = ((String)right).charAt(0)=='"'?right.toString().substring(1,((String)right).length()-1):right.toString();
+					String l = left.toString();
+					return  l+r;
+
 				}
 				if (left instanceof Number && right instanceof Number) {
 					if (left instanceof Integer && right instanceof Integer) {
@@ -809,7 +822,7 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 		Deque<String> stack = new ArrayDeque<>();
 
 		for (Object token : tokens) {
-			if (token instanceof String op) {
+			if (token instanceof String op && PRECEDENCE.get(op)!=null) {
 				while (!stack.isEmpty() &&
 						PRECEDENCE.get(stack.peek()) >= PRECEDENCE.get(op)) {
 					output.add(stack.pop());
@@ -832,7 +845,7 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 		Deque<Object> stack = new ArrayDeque<>();
 
 		for (Object token : postfix) {
-			if (token instanceof String op) {
+			if (token instanceof String op && PRECEDENCE.get(op)!=null) {
 				Object right = stack.pop();
 				Object left = stack.pop();
 				stack.push(evaluate(left, op, right));

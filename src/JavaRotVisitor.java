@@ -16,18 +16,6 @@ public interface JavaRotVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitProgram(JavaRotParser.ProgramContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link JavaRotParser#classDeclaration}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitClassDeclaration(JavaRotParser.ClassDeclarationContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link JavaRotParser#constructorDeclaration}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitConstructorDeclaration(JavaRotParser.ConstructorDeclarationContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link JavaRotParser#methodDeclaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -46,29 +34,11 @@ public interface JavaRotVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitType(JavaRotParser.TypeContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link JavaRotParser#encapsulation}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitEncapsulation(JavaRotParser.EncapsulationContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link JavaRotParser#modifier}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitModifier(JavaRotParser.ModifierContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link JavaRotParser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitStatement(JavaRotParser.StatementContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link JavaRotParser#fieldDeclaration}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFieldDeclaration(JavaRotParser.FieldDeclarationContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link JavaRotParser#variableDeclaration}.
 	 * @param ctx the parse tree

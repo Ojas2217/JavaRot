@@ -40,27 +40,12 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitProgram(JavaRotParser.ProgramContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitClassDeclaration(JavaRotParser.ClassDeclarationContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitConstructorDeclaration(JavaRotParser.ConstructorDeclarationContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
+	@Override public T visitProgram(JavaRotParser.ProgramContext ctx) {
+		scopes.push(new HashMap<>(currentScope));
+		currentScope = scopes.peek();
+		return visitChildren(ctx);
+	}
+
 	@Override public T visitMethodDeclaration(JavaRotParser.MethodDeclarationContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
@@ -82,28 +67,8 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitEncapsulation(JavaRotParser.EncapsulationContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitModifier(JavaRotParser.ModifierContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
 	@Override public T visitStatement(JavaRotParser.StatementContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitFieldDeclaration(JavaRotParser.FieldDeclarationContext ctx) { return visitChildren(ctx); }
+
 	/**
 	 * {@inheritDoc}
 	 *
@@ -490,8 +455,11 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 			values.put(ctx, values.get(ctx.expression(0)));
 		}
 		else if (ctx.operator() != null) {
-			List<Object> tokens = flattenExpression(ctx);
-			Object result = evaluateWithPrecedence(tokens);
+			Object left = values.get(ctx.expression(0));
+			Object right = values.get(ctx.expression(1));
+
+			String op = ctx.operator().getText();
+			Object result = evaluate(left, op, right);
 			values.put(ctx, result);
 		}
 		else if (ctx.literal() != null) {
@@ -698,6 +666,7 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 			}
 
 			case "nd" -> {
+
 				if(left instanceof Boolean && right instanceof Boolean) {
 					boolean l = (Boolean) left;
 					boolean r = (Boolean) right;

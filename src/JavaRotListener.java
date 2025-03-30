@@ -17,26 +17,6 @@ public interface JavaRotListener extends ParseTreeListener {
 	 */
 	void exitProgram(JavaRotParser.ProgramContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link JavaRotParser#classDeclaration}.
-	 * @param ctx the parse tree
-	 */
-	void enterClassDeclaration(JavaRotParser.ClassDeclarationContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link JavaRotParser#classDeclaration}.
-	 * @param ctx the parse tree
-	 */
-	void exitClassDeclaration(JavaRotParser.ClassDeclarationContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link JavaRotParser#constructorDeclaration}.
-	 * @param ctx the parse tree
-	 */
-	void enterConstructorDeclaration(JavaRotParser.ConstructorDeclarationContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link JavaRotParser#constructorDeclaration}.
-	 * @param ctx the parse tree
-	 */
-	void exitConstructorDeclaration(JavaRotParser.ConstructorDeclarationContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link JavaRotParser#methodDeclaration}.
 	 * @param ctx the parse tree
 	 */
@@ -67,26 +47,6 @@ public interface JavaRotListener extends ParseTreeListener {
 	 */
 	void exitType(JavaRotParser.TypeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link JavaRotParser#encapsulation}.
-	 * @param ctx the parse tree
-	 */
-	void enterEncapsulation(JavaRotParser.EncapsulationContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link JavaRotParser#encapsulation}.
-	 * @param ctx the parse tree
-	 */
-	void exitEncapsulation(JavaRotParser.EncapsulationContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link JavaRotParser#modifier}.
-	 * @param ctx the parse tree
-	 */
-	void enterModifier(JavaRotParser.ModifierContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link JavaRotParser#modifier}.
-	 * @param ctx the parse tree
-	 */
-	void exitModifier(JavaRotParser.ModifierContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link JavaRotParser#statement}.
 	 * @param ctx the parse tree
 	 */
@@ -96,16 +56,6 @@ public interface JavaRotListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitStatement(JavaRotParser.StatementContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link JavaRotParser#fieldDeclaration}.
-	 * @param ctx the parse tree
-	 */
-	void enterFieldDeclaration(JavaRotParser.FieldDeclarationContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link JavaRotParser#fieldDeclaration}.
-	 * @param ctx the parse tree
-	 */
-	void exitFieldDeclaration(JavaRotParser.FieldDeclarationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link JavaRotParser#variableDeclaration}.
 	 * @param ctx the parse tree

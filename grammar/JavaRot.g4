@@ -1,17 +1,11 @@
 grammar JavaRot;
 
-program: statement+ | (classDeclaration | methodDeclaration | constructorDeclaration | statement)+;
+program: statement+;
 
 
-classDeclaration
-    : encapsulation? THS_SHI IDENTIFIER '{' (methodDeclaration | statement)* '}'
-    ;
 
-constructorDeclaration
-    : encapsulation?  IDENTIFIER '(' parameterList? ')' block
-    ;
 methodDeclaration
-    : encapsulation? modifier* type IDENTIFIER '(' parameterList? ')' block
+    : type IDENTIFIER '(' parameterList? ')' block
     ;
 
 parameterList
@@ -27,17 +21,9 @@ type
     | TUAH ('[' ']')? //double
     | IDENTIFIER
     ;
-encapsulation
-    : PRVT
-    | PBLC
-    ;
-modifier
-    : STTC
-    | FN
-    ;
+
 statement
-    : fieldDeclaration
-    |variableDeclaration
+    :variableDeclaration
     | assignment
     | ifStatement
     | whileStatement
@@ -48,10 +34,6 @@ statement
     | continueStatement
     | tryCatchStatement
     | printStatement
-    ;
-
-fieldDeclaration
-    : encapsulation type IDENTIFIER (TS expression | TS  '{' expression (',' expression)* '}' | TS  NEW type '[' expression ']')? statementEnd
     ;
 
 variableDeclaration

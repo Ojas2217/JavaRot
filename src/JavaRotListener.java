@@ -17,26 +17,6 @@ public interface JavaRotListener extends ParseTreeListener {
 	 */
 	void exitProgram(JavaRotParser.ProgramContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link JavaRotParser#methodDeclaration}.
-	 * @param ctx the parse tree
-	 */
-	void enterMethodDeclaration(JavaRotParser.MethodDeclarationContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link JavaRotParser#methodDeclaration}.
-	 * @param ctx the parse tree
-	 */
-	void exitMethodDeclaration(JavaRotParser.MethodDeclarationContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link JavaRotParser#parameterList}.
-	 * @param ctx the parse tree
-	 */
-	void enterParameterList(JavaRotParser.ParameterListContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link JavaRotParser#parameterList}.
-	 * @param ctx the parse tree
-	 */
-	void exitParameterList(JavaRotParser.ParameterListContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link JavaRotParser#type}.
 	 * @param ctx the parse tree
 	 */
@@ -56,6 +36,26 @@ public interface JavaRotListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitStatement(JavaRotParser.StatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRotParser#methodDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterMethodDeclaration(JavaRotParser.MethodDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRotParser#methodDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitMethodDeclaration(JavaRotParser.MethodDeclarationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaRotParser#parameterList}.
+	 * @param ctx the parse tree
+	 */
+	void enterParameterList(JavaRotParser.ParameterListContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaRotParser#parameterList}.
+	 * @param ctx the parse tree
+	 */
+	void exitParameterList(JavaRotParser.ParameterListContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link JavaRotParser#variableDeclaration}.
 	 * @param ctx the parse tree

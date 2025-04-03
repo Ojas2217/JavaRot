@@ -16,18 +16,6 @@ public interface JavaRotVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitProgram(JavaRotParser.ProgramContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link JavaRotParser#methodDeclaration}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitMethodDeclaration(JavaRotParser.MethodDeclarationContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link JavaRotParser#parameterList}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitParameterList(JavaRotParser.ParameterListContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link JavaRotParser#type}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -39,6 +27,18 @@ public interface JavaRotVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitStatement(JavaRotParser.StatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link JavaRotParser#methodDeclaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMethodDeclaration(JavaRotParser.MethodDeclarationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link JavaRotParser#parameterList}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParameterList(JavaRotParser.ParameterListContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link JavaRotParser#variableDeclaration}.
 	 * @param ctx the parse tree

@@ -17,6 +17,7 @@ import java.util.*;
 @SuppressWarnings("CheckReturnValue")
 public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements JavaRotVisitor<T> {
 	static ParseTreeProperty<Object> values = new ParseTreeProperty<>();
+	Map<Method,JavaRotParser.ParameterListContext> methods = new HashMap<>();
 	Deque<Map<String, Object>> scopes = new ArrayDeque<>();
 	Map<String, Object> currentScope = new HashMap<>();
 	static final Map<String, Integer> PRECEDENCE = Map.ofEntries(
@@ -46,7 +47,89 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 		return visitChildren(ctx);
 	}
 
-	@Override public T visitMethodDeclaration(JavaRotParser.MethodDeclarationContext ctx) { return visitChildren(ctx); }
+	@Override public T visitMethodDeclaration(JavaRotParser.MethodDeclarationContext ctx) {
+		visitChildren(ctx);
+		String type = ctx.type().getText();
+		switch(type){
+			case "tax"->{
+				for(JavaRotParser.StatementContext st: ctx.block().statement()) {
+                    if(st.returnStatement()!=null && !(values.get(st.returnStatement().expression()) instanceof Integer)){
+						throw new RuntimeException("Invalid return type");
+					}
+				}
+			}
+			case "chat"->{
+				for(JavaRotParser.StatementContext st: ctx.block().statement()) {
+					if(st.returnStatement()!=null && !(values.get(st.returnStatement().expression()) instanceof Character)){
+						throw new RuntimeException("Invalid return type");
+					}
+				}
+			}
+			case "ong"->{
+				for(JavaRotParser.StatementContext st: ctx.block().statement()) {
+					if(st.returnStatement()!=null && !(values.get(st.returnStatement().expression()) instanceof Boolean)){
+						throw new RuntimeException("Invalid return type");
+					}
+				}
+			}
+			case "Skibidi"->{
+				for(JavaRotParser.StatementContext st: ctx.block().statement()) {
+					if(st.returnStatement()!=null && !(values.get(st.returnStatement().expression()) instanceof String)){
+						throw new RuntimeException("Invalid return type");
+					}
+				}
+			}
+			case "tuah"->{
+				for(JavaRotParser.StatementContext st: ctx.block().statement()) {
+					if(st.returnStatement()!=null && !(values.get(st.returnStatement().expression()) instanceof Double)){
+						throw new RuntimeException("Invalid return type");
+					}
+				}
+			}
+			case "tax[]"->{
+				for(JavaRotParser.StatementContext st: ctx.block().statement()) {
+					if(st.returnStatement()!=null && !(values.get(st.returnStatement().expression()) instanceof Integer[])){
+						throw new RuntimeException("Invalid return type");
+					}
+				}
+			}
+			case "chat[]"->{
+				for(JavaRotParser.StatementContext st: ctx.block().statement()) {
+					if(st.returnStatement()!=null && !(values.get(st.returnStatement().expression()) instanceof Character[])){
+						throw new RuntimeException("Invalid return type");
+					}
+				}
+			}
+			case "ong[]"->{
+				for(JavaRotParser.StatementContext st: ctx.block().statement()) {
+					if(st.returnStatement()!=null && !(values.get(st.returnStatement().expression()) instanceof Boolean[])){
+						throw new RuntimeException("Invalid return type");
+					}
+				}
+			}
+			case "Skibidi[]"->{
+				for(JavaRotParser.StatementContext st: ctx.block().statement()) {
+					if(st.returnStatement()!=null && !(values.get(st.returnStatement().expression()) instanceof String[])){
+						throw new RuntimeException("Invalid return type");
+					}
+				}
+			}
+			case "tuah[]"->{
+				for(JavaRotParser.StatementContext st: ctx.block().statement()) {
+					if(st.returnStatement()!=null && !(values.get(st.returnStatement().expression()) instanceof Double[])){
+						throw new RuntimeException("Invalid return type");
+					}
+				}
+			}
+		}
+		String name = ctx.IDENTIFIER().getText();
+		Method method = new Method(type,name,ctx.block());
+		if(methods.containsKey(method)&&methods.get(method).equals(ctx.parameterList())) {
+			throw new RuntimeException("Method signature already defined");
+		}
+		methods.put(method,ctx.parameterList());
+		return null;
+	}
 	/**
 	 * {@inheritDoc}
 	 *

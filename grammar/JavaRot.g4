@@ -2,16 +2,6 @@ grammar JavaRot;
 
 program: statement+;
 
-
-
-methodDeclaration
-    : type IDENTIFIER '(' parameterList? ')' block
-    ;
-
-parameterList
-    : type IDENTIFIER (',' type IDENTIFIER)*
-    ;
-
 type
     : TAX ('[' ']')? //int
     | ONG ('[' ']')?  //boolean
@@ -34,6 +24,13 @@ statement
     | continueStatement
     | tryCatchStatement
     | printStatement
+    | methodDeclaration
+    ;
+methodDeclaration
+    : type IDENTIFIER '(' parameterList? ')' block
+    ;
+parameterList
+    : type IDENTIFIER (',' type IDENTIFIER)*
     ;
 
 variableDeclaration

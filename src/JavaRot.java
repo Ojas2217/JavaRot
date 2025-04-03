@@ -11,9 +11,14 @@ import java.io.IOException;
 
 public class JavaRot {
     public static void main(String[] args) {
-
+//        if (args.length < 1) {
+//            System.out.println("Usage: java JavaRot <filename>");
+//            return;
+//        }
+//
+//        String filename = args[0];
         try {
-            CharStream c = CharStreams.fromFileName("script.JavaRot");
+            CharStream c = CharStreams.fromFileName("script.JavaRot"); // replace this with filename later
             JavaRotLexer lexer = new JavaRotLexer(c);
             JavaRotParser parser = new JavaRotParser(new CommonTokenStream(lexer));
             parser.addParseListener(new JavaRotBaseListener());

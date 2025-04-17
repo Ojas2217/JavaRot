@@ -47,8 +47,8 @@ Here are all the keywords used in the language:
 | <         | ts les          |
 | >         | ts grtr         |
 | !=        | ts not eql      |
-| c++       | long ahh        |
-| c--       | small ahh       |
+| c++       | c long ahh        |
+| c--       | c small ahh       |
 | !         | ts nt           |
 | &&        | nd              |
 | \|\|      | or              |

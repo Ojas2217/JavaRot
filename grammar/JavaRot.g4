@@ -181,11 +181,11 @@ SEMI            : ';';                  //You can use the default line terminato
 PMO_HEART     : '💔';                   //but i'd encourage you to use this one
 
 // Literals
-TAX_LITERAL     : [0-9]+;
+TAX_LITERAL     : '-'?[0-9]+;
 ONG_LITERAL     : 'fr' | 'cap';
 SKIBIDI_LITERAL : '"' (ESC | ~["\\])* '"';
 CHAT_LITERAL    : '\'' (ESC | ~['\\]) '\'';
-TUAH_LITERAL    : [0-9]+ '.' [0-9]* ([eE][+-]?[0-9]+)?;
+TUAH_LITERAL    : '-'?([0-9]+ '.' [0-9]*);
 IDENTIFIER      : [a-zA-Z_][a-zA-Z_0-9]*;
 
 

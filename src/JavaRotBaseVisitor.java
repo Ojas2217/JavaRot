@@ -129,7 +129,8 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
                 }
                 // Case 2: new arr[size]
                 else if (ctx.expression(0).NEW() != null) {
-                    int size = (Integer) values.get(ctx.expression(0).expression(0).literal());
+
+                    int size = (Integer)values.get(ctx.expression(0).expression(0).literal()!=null?ctx.expression(0).expression(0).literal():ctx.expression(0).expression(0));
                     value = createArray(baseType, size);
                     currentScope.put(varName, value);
                 }
@@ -304,14 +305,20 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
     @Override
     public T visitWhileStatement(JavaRotParser.WhileStatementContext ctx) {
         this.visit(ctx.expression());
-
+        Object con = values.get(ctx.expression());
         while (true) {
-            Object con = values.get(ctx.expression());
+
             if (!(con instanceof Boolean)) {
                 throw new RuntimeException("Condition must be a boolean");
             }
             if (!((Boolean) con)) break;
-            this.visit(ctx.block());
+            try {
+                this.visit(ctx.block());
+            }
+            catch (BreakException e) {
+                break;
+            }
+            catch (ContinueException e) {}
             this.visit(ctx.expression());
             con = values.get(ctx.expression());
         }
@@ -364,7 +371,13 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
             condition = (Boolean) condValue;
         }
         while (condition) {
-            visit(ctx.block());
+            try {
+                visit(ctx.block());
+            }
+            catch (BreakException e) {
+                break;
+            }
+            catch (ContinueException e) {}
             if (updateExp != null) {
                 visit(updateExp);
             }
@@ -534,7 +547,39 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
             scopes.pop();
             currentScope = previousScope;
             values.put(ctx, returnValue);
-        } else if (ctx.NEW() != null) {
+        }
+        else if (ctx.operator() != null) {
+            List<Object> tokens = flattenExpression(ctx);
+            Object result = evaluateWithPrecedence(tokens);
+            values.put(ctx, result);
+        }
+        else if (ctx.LONG_AHH() != null || ctx.SMALL_AHH() != null) {
+            String varName = ctx.IDENTIFIER().getText();
+            Object value = currentScope.get(varName);
+
+            if (value == null) {
+                throw new RuntimeException("Undefined variable: " + varName);
+            }
+            if (!(value instanceof Integer)) {
+                throw new RuntimeException("Increment/decrement requires integer variable");
+            }
+
+            int original = (Integer) value;
+            int delta = ctx.LONG_AHH() != null ? 1 : -1;
+            currentScope.replace(varName, original + delta);
+            values.put(ctx, original);
+        }else if (ctx.literal() != null) {
+            values.put(ctx, values.get(ctx.literal()));
+        } else if (ctx.IDENTIFIER() != null) {
+            String varName = ctx.IDENTIFIER().getText();
+            Object value = currentScope.get(varName);
+
+            if (value == null) {
+                throw new RuntimeException("Undefined variable: " + varName);
+            }
+            values.put(ctx, value);
+        }
+        else if (ctx.NEW() != null) {
             String type = determineType(ctx.type());
             Object sizeObj = values.get(ctx.expression().getFirst());
 
@@ -560,21 +605,6 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
                 throw new RuntimeException("TS_NT requires boolean operand");
             }
             values.put(ctx, !(Boolean) value);
-        } else if (ctx.LONG_AHH() != null || ctx.SMALL_AHH() != null) {
-            String varName = ctx.IDENTIFIER().getText();
-            Object value = currentScope.get(varName);
-
-            if (value == null) {
-                throw new RuntimeException("Undefined variable: " + varName);
-            }
-            if (!(value instanceof Integer)) {
-                throw new RuntimeException("Increment/decrement requires integer variable");
-            }
-
-            int original = (Integer) value;
-            int delta = ctx.LONG_AHH() != null ? 1 : -1;
-            currentScope.replace(varName, original + delta);
-            values.put(ctx, original);
         } else if (ctx.getChildCount() == 4 && ctx.getChild(1).getText().equals("[")) {
             Object array = values.get(ctx.expression(0));
             Object indexObj = values.get(ctx.expression(1));
@@ -583,35 +613,21 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
                 throw new RuntimeException("Array index must be an integer");
             }
             int index = (Integer) indexObj;
-            Object value = switch (array) {
-                case Integer[] arr -> arr[index];
-                case Double[] arr -> arr[index];
-                case String[] arr -> arr[index];
-                case Boolean[] arr -> arr[index];
-                case Character[] arr -> arr[index];
-                default -> throw new RuntimeException("Invalid array type");
-            };
+            if(index>=0) {
+                Object value = switch (array) {
+                    case Integer[] arr -> arr[index];
+                    case Double[] arr -> arr[index];
+                    case String[] arr -> arr[index];
+                    case Boolean[] arr -> arr[index];
+                    case Character[] arr -> arr[index];
+                    default -> throw new RuntimeException("Invalid array type or index");
+                };
+                values.put(ctx, value);
+            }
 
-            values.put(ctx, value);
+
         } else if (ctx.getChildCount() == 3 && ctx.getChild(0).getText().equals("(")) {
             values.put(ctx, values.get(ctx.expression(0)));
-        } else if (ctx.operator() != null) {
-            Object left = values.get(ctx.expression(0));
-            Object right = values.get(ctx.expression(1));
-
-            String op = ctx.operator().getText();
-            Object result = evaluate(left, op, right);
-            values.put(ctx, result);
-        } else if (ctx.literal() != null) {
-            values.put(ctx, values.get(ctx.literal()));
-        } else if (ctx.IDENTIFIER() != null) {
-            String varName = ctx.IDENTIFIER().getText();
-            Object value = currentScope.get(varName);
-
-            if (value == null) {
-                throw new RuntimeException("Undefined variable: " + varName);
-            }
-            values.put(ctx, value);
         } else {
             throw new RuntimeException("Unsupported expression: " + ctx.getText());
         }
@@ -705,7 +721,8 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
      */
     @Override
     public T visitBreakStatement(JavaRotParser.BreakStatementContext ctx) {
-        return visitChildren(ctx);
+        throw new BreakException();
+
     }
 
     /**
@@ -716,7 +733,7 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
      */
     @Override
     public T visitContinueStatement(JavaRotParser.ContinueStatementContext ctx) {
-        return visitChildren(ctx);
+        throw new ContinueException();
     }
 
     /**
@@ -878,7 +895,7 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
         else if (ctx.CHAT() != null) type.append("chat");
         else if (ctx.GONE() != null) type.append("gone");
         else if (ctx.IDENTIFIER() != null) type.append(ctx.IDENTIFIER().getText());
-
+        if(ctx.getChildCount()>1 && ctx.getChild(1).getText().equals("["))type.append("[]");
         return type.toString();
     }
 
@@ -999,6 +1016,7 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 
         return stack.pop();
     }
-
+    private static class BreakException extends RuntimeException {}
+    private static class ContinueException extends RuntimeException {}
 
 }

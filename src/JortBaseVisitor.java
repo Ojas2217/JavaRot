@@ -1,4 +1,4 @@
-package src;// Generated from grammar/JavaRot.g4 by ANTLR 4.13.2
+package src;// Generated from grammar/Jort.g4 by ANTLR 4.13.2
 
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -8,7 +8,7 @@ import java.util.*;
 
 
 /**
- * This class provides an empty implementation of {@link JavaRotVisitor},
+ * This class provides an empty implementation of {@link JortVisitor},
  * which can be extended to create a visitor which only needs to handle a subset
  * of the available methods.
  *
@@ -16,7 +16,7 @@ import java.util.*;
  *            operations with no return type.
  */
 @SuppressWarnings("CheckReturnValue")
-public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements JavaRotVisitor<T> {
+public class JortBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements JortVisitor<T> {
     static ParseTreeProperty<Object> values = new ParseTreeProperty<>();
     Map<String, Method> methods = new HashMap<>();
     Deque<Map<String, Object>> scopes = new ArrayDeque<>();
@@ -45,18 +45,18 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitProgram(JavaRotParser.ProgramContext ctx) {
+    public T visitProgram(JortParser.ProgramContext ctx) {
         scopes.push(new HashMap<>(currentScope));
         currentScope = scopes.peek();
         return visitChildren(ctx);
     }
 
     @Override
-    public T visitMethodDeclaration(JavaRotParser.MethodDeclarationContext ctx) {
+    public T visitMethodDeclaration(JortParser.MethodDeclarationContext ctx) {
         String type = determineType(ctx.type());
         String name = ctx.IDENTIFIER().getText();
-        JavaRotParser.ParameterListContext params = ctx.parameterList();
-        JavaRotParser.BlockContext block = ctx.block();
+        JortParser.ParameterListContext params = ctx.parameterList();
+        JortParser.BlockContext block = ctx.block();
         Method method = new Method(type, name, params, block);
         if (methods.containsKey(name)) {
             throw new RuntimeException("Method already defined: " + name);
@@ -72,7 +72,7 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitParameterList(JavaRotParser.ParameterListContext ctx) {
+    public T visitParameterList(JortParser.ParameterListContext ctx) {
         return visitChildren(ctx);
     }
 
@@ -83,7 +83,7 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitType(JavaRotParser.TypeContext ctx) {
+    public T visitType(JortParser.TypeContext ctx) {
         return visitChildren(ctx);
     }
 
@@ -94,7 +94,7 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitStatement(JavaRotParser.StatementContext ctx) {
+    public T visitStatement(JortParser.StatementContext ctx) {
         return visitChildren(ctx);
     }
 
@@ -105,7 +105,7 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitVariableDeclaration(JavaRotParser.VariableDeclarationContext ctx) {
+    public T visitVariableDeclaration(JortParser.VariableDeclarationContext ctx) {
         visitChildren(ctx);
         String baseType = determineBaseType(ctx.type().getFirst());
         boolean isArray = isArrayType(ctx.type().getFirst());
@@ -116,10 +116,10 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
             if (ctx.expression() != null && !ctx.expression().isEmpty()) {
                 // Case 1: {1, 2, 3}
                 if (ctx.expression().get(0).getChildCount() > 0 &&
-                        ctx.expression().get(0).getChild(0) instanceof JavaRotParser.LiteralContext) {
+                        ctx.expression().get(0).getChild(0) instanceof JortParser.LiteralContext) {
                     int i = 0;
                     List<Object> elements = new ArrayList<>();
-                    while (ctx.expression(i) != null && ctx.expression(i).getChild(0) instanceof JavaRotParser.LiteralContext) {
+                    while (ctx.expression(i) != null && ctx.expression(i).getChild(0) instanceof JortParser.LiteralContext) {
                         elements.add(values.get(ctx.expression(i).getChild(0)));
                         i++;
                     }
@@ -174,7 +174,7 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitAssignment(JavaRotParser.AssignmentContext ctx) {
+    public T visitAssignment(JortParser.AssignmentContext ctx) {
         visitChildren(ctx);
         if (ctx.arrayIndex() != null) {
             String varName = ctx.arrayIndex().IDENTIFIER().getText();
@@ -269,7 +269,7 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitArrayIndex(JavaRotParser.ArrayIndexContext ctx) {
+    public T visitArrayIndex(JortParser.ArrayIndexContext ctx) {
         return visitChildren(ctx);
     }
 
@@ -280,7 +280,7 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitIfStatement(JavaRotParser.IfStatementContext ctx) {
+    public T visitIfStatement(JortParser.IfStatementContext ctx) {
         this.visit(ctx.expression());
         Object con = values.get(ctx.expression());
         if (!(con instanceof Boolean)) {
@@ -303,7 +303,7 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitWhileStatement(JavaRotParser.WhileStatementContext ctx) {
+    public T visitWhileStatement(JortParser.WhileStatementContext ctx) {
         this.visit(ctx.expression());
         Object con = values.get(ctx.expression());
         while (true) {
@@ -332,28 +332,28 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitForStatement(JavaRotParser.ForStatementContext ctx) {
-        JavaRotParser.VariableDeclarationContext initVar = null;
-        JavaRotParser.ExpressionContext initExp = null;
-        JavaRotParser.ExpressionContext updateExp = null;
-        JavaRotParser.ExpressionContext conditionCtx = null;
+    public T visitForStatement(JortParser.ForStatementContext ctx) {
+        JortParser.VariableDeclarationContext initVar = null;
+        JortParser.ExpressionContext initExp = null;
+        JortParser.ExpressionContext updateExp = null;
+        JortParser.ExpressionContext conditionCtx = null;
 
         for (int i = 0; i < ctx.getChildCount(); i++) {
             ParseTree child = ctx.getChild(i);
-            if (child instanceof JavaRotParser.VariableDeclarationContext) {
-                initVar = (JavaRotParser.VariableDeclarationContext) child;
-            } else if (child instanceof JavaRotParser.ExpressionContext) {
+            if (child instanceof JortParser.VariableDeclarationContext) {
+                initVar = (JortParser.VariableDeclarationContext) child;
+            } else if (child instanceof JortParser.ExpressionContext) {
                 // Position 2: init's expressionStatement (after 'GOON' and '(')
                 if (i == 3) {
-                    initExp = (JavaRotParser.ExpressionContext) child;
+                    initExp = (JortParser.ExpressionContext) child;
                 }
                 // Position 3: update's expressionStatement
                 else if (i == 4) {
-                    updateExp = (JavaRotParser.ExpressionContext) child;
+                    updateExp = (JortParser.ExpressionContext) child;
                 }
-            } else if (child instanceof JavaRotParser.ExpressionStatementContext) {
+            } else if (child instanceof JortParser.ExpressionStatementContext) {
                 // Position 4: condition expression
-                conditionCtx = ((JavaRotParser.ExpressionStatementContext) child).expression();
+                conditionCtx = ((JortParser.ExpressionStatementContext) child).expression();
             }
         }
         if (initVar != null) {
@@ -402,7 +402,7 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitReturnStatement(JavaRotParser.ReturnStatementContext ctx) {
+    public T visitReturnStatement(JortParser.ReturnStatementContext ctx) {
         Object ret = null;
         if (ctx.expression() != null) {
             visit(ctx.expression());
@@ -454,7 +454,7 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitPrintStatement(JavaRotParser.PrintStatementContext ctx) {
+    public T visitPrintStatement(JortParser.PrintStatementContext ctx) {
         visitChildren(ctx);
         Object toPrint = values.get(ctx.argumentList().expression(0));
         if (toPrint instanceof String && ((String) toPrint).charAt(0) == '"')
@@ -470,7 +470,7 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitExpressionStatement(JavaRotParser.ExpressionStatementContext ctx) {
+    public T visitExpressionStatement(JortParser.ExpressionStatementContext ctx) {
         return visitChildren(ctx);
     }
 
@@ -481,7 +481,7 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitExpression(JavaRotParser.ExpressionContext ctx) {
+    public T visitExpression(JortParser.ExpressionContext ctx) {
         visitChildren(ctx);
         if (ctx.IDENTIFIER() != null && ctx.argumentList() != null) {
             String methodName = ctx.IDENTIFIER().getText();
@@ -491,23 +491,23 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
             }
             List<Object> args = new ArrayList<>();
             if (ctx.argumentList() != null) {
-                for (JavaRotParser.ExpressionContext argCtx : ctx.argumentList().expression()) {
+                for (JortParser.ExpressionContext argCtx : ctx.argumentList().expression()) {
                     visit(argCtx);
                     args.add(values.get(argCtx));
                 }
             }
 
-            JavaRotParser.ParameterListContext params = method.params;
+            JortParser.ParameterListContext params = method.params;
             int expected = 0;
             for (int i = 0; i < params.getChildCount(); i++) {
-                if (params.getChild(i) instanceof JavaRotParser.TypeContext) expected++;
+                if (params.getChild(i) instanceof JortParser.TypeContext) expected++;
             }
             if (args.size() != expected) {
                 throw new RuntimeException("Parameter count mismatch");
             }
 
             for (int i = 0; i < expected; i++) {
-                JavaRotParser.TypeContext paramTypeCtx = params.type(i);
+                JortParser.TypeContext paramTypeCtx = params.type(i);
                 String paramType = determineType(paramTypeCtx);
                 Object argValue = args.get(i);
                 String argType = getTypeOfValue(argValue);
@@ -641,7 +641,7 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitLiteral(JavaRotParser.LiteralContext ctx) {
+    public T visitLiteral(JortParser.LiteralContext ctx) {
         if (ctx.TAX_LITERAL() != null) {
             values.put(ctx, Integer.parseInt(ctx.getText()));
         } else if (ctx.ONG_LITERAL() != null) {
@@ -665,7 +665,7 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitOperator(JavaRotParser.OperatorContext ctx) {
+    public T visitOperator(JortParser.OperatorContext ctx) {
         return visitChildren(ctx);
     }
 
@@ -676,15 +676,15 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitBlock(JavaRotParser.BlockContext ctx) {
-        if (!(ctx.getParent() instanceof JavaRotParser.WhileStatementContext || ctx.getParent() instanceof JavaRotParser.ForStatementContext)) {
+    public T visitBlock(JortParser.BlockContext ctx) {
+        if (!(ctx.getParent() instanceof JortParser.WhileStatementContext || ctx.getParent() instanceof JortParser.ForStatementContext)) {
             scopes.push(new HashMap<>(currentScope));
             currentScope = scopes.peek();
         }
-        for (JavaRotParser.StatementContext stmt : ctx.statement()) {
+        for (JortParser.StatementContext stmt : ctx.statement()) {
             visit(stmt);
         }
-        if (!(ctx.getParent() instanceof JavaRotParser.WhileStatementContext || ctx.getParent() instanceof JavaRotParser.ForStatementContext)) {
+        if (!(ctx.getParent() instanceof JortParser.WhileStatementContext || ctx.getParent() instanceof JortParser.ForStatementContext)) {
             scopes.pop();
             currentScope = scopes.peek();
         }
@@ -698,7 +698,7 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitArgumentList(JavaRotParser.ArgumentListContext ctx) {
+    public T visitArgumentList(JortParser.ArgumentListContext ctx) {
         return visitChildren(ctx);
     }
 
@@ -709,7 +709,7 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitTryCatchStatement(JavaRotParser.TryCatchStatementContext ctx) {
+    public T visitTryCatchStatement(JortParser.TryCatchStatementContext ctx) {
         return visitChildren(ctx);
     }
 
@@ -720,7 +720,7 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitBreakStatement(JavaRotParser.BreakStatementContext ctx) {
+    public T visitBreakStatement(JortParser.BreakStatementContext ctx) {
         throw new BreakException();
 
     }
@@ -732,7 +732,7 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitContinueStatement(JavaRotParser.ContinueStatementContext ctx) {
+    public T visitContinueStatement(JortParser.ContinueStatementContext ctx) {
         throw new ContinueException();
     }
 
@@ -743,7 +743,7 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitStatementEnd(JavaRotParser.StatementEndContext ctx) {
+    public T visitStatementEnd(JortParser.StatementEndContext ctx) {
         return visitChildren(ctx);
     }
 
@@ -886,7 +886,7 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
         };
     }
 
-    String determineType(JavaRotParser.TypeContext ctx) {
+    String determineType(JortParser.TypeContext ctx) {
         StringBuilder type = new StringBuilder();
         if (ctx.TAX() != null) type.append("tax");
         else if (ctx.ONG() != null) type.append("ong");
@@ -899,7 +899,7 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
         return type.toString();
     }
 
-    private String determineBaseType(JavaRotParser.TypeContext typeCtx) {
+    private String determineBaseType(JortParser.TypeContext typeCtx) {
         if (typeCtx.TAX() != null) return "tax";
         if (typeCtx.ONG() != null) return "ong";
         if (typeCtx.TUAH() != null) return "tuah";
@@ -908,7 +908,7 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
         return typeCtx.IDENTIFIER().getText();
     }
 
-    private boolean isArrayType(JavaRotParser.TypeContext typeCtx) {
+    private boolean isArrayType(JortParser.TypeContext typeCtx) {
         return typeCtx.getChildCount() > 1 && typeCtx.getChild(1).getText().equals("[");
     }
 
@@ -958,7 +958,7 @@ public class JavaRotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
         }
     }
 
-    List<Object> flattenExpression(JavaRotParser.ExpressionContext ctx) {
+    List<Object> flattenExpression(JortParser.ExpressionContext ctx) {
         List<Object> tokens = new ArrayList<>();
         if (ctx.operator() != null) {
             tokens.addAll(flattenExpression(ctx.expression(0)));

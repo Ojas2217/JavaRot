@@ -1,4 +1,4 @@
-package src;// Generated from grammar/JavaRot.g4 by ANTLR 4.13.2
+package src;// Generated from grammar/Jort.g4 by ANTLR 4.13.2
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.*;
@@ -6,7 +6,7 @@ import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast", "CheckReturnValue", "this-escape"})
-public class JavaRotLexer extends Lexer {
+public class JortLexer extends Lexer {
 	static { RuntimeMetaData.checkVersion("4.13.2", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
@@ -106,13 +106,13 @@ public class JavaRotLexer extends Lexer {
 	}
 
 
-	public JavaRotLexer(CharStream input) {
+	public JortLexer(CharStream input) {
 		super(input);
 		_interp = new LexerATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 
 	@Override
-	public String getGrammarFileName() { return "JavaRot.g4"; }
+	public String getGrammarFileName() { return "Jort.g4"; }
 
 	@Override
 	public String[] getRuleNames() { return ruleNames; }

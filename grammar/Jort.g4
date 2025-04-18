@@ -1,4 +1,4 @@
-grammar JavaRot;
+grammar Jort;
 
 program: statement+;
 

@@ -1,4 +1,4 @@
-package src;// Generated from grammar/JavaRot.g4 by ANTLR 4.13.2
+package src;// Generated from grammar/Jort.g4 by ANTLR 4.13.2
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
@@ -7,7 +7,7 @@ import org.antlr.v4.runtime.tree.*;
 import java.util.List;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast", "CheckReturnValue", "this-escape"})
-public class JavaRotParser extends Parser {
+public class JortParser extends Parser {
 	static { RuntimeMetaData.checkVersion("4.13.2", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
@@ -103,7 +103,7 @@ public class JavaRotParser extends Parser {
 	}
 
 	@Override
-	public String getGrammarFileName() { return "JavaRot.g4"; }
+	public String getGrammarFileName() { return "Jort.g4"; }
 
 	@Override
 	public String[] getRuleNames() { return ruleNames; }
@@ -114,7 +114,7 @@ public class JavaRotParser extends Parser {
 	@Override
 	public ATN getATN() { return _ATN; }
 
-	public JavaRotParser(TokenStream input) {
+	public JortParser(TokenStream input) {
 		super(input);
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
@@ -133,15 +133,15 @@ public class JavaRotParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_program; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener) ((JavaRotListener)listener).enterProgram(this);
+			if ( listener instanceof JortListener) ((JortListener)listener).enterProgram(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitProgram(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).exitProgram(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitProgram(this);
+			if ( visitor instanceof JortVisitor) return ((JortVisitor<? extends T>)visitor).visitProgram(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -182,28 +182,28 @@ public class JavaRotParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class TypeContext extends ParserRuleContext {
-		public TerminalNode TAX() { return getToken(JavaRotParser.TAX, 0); }
-		public TerminalNode ONG() { return getToken(JavaRotParser.ONG, 0); }
-		public TerminalNode GONE() { return getToken(JavaRotParser.GONE, 0); }
-		public TerminalNode CHAT() { return getToken(JavaRotParser.CHAT, 0); }
-		public TerminalNode SKIBIDI() { return getToken(JavaRotParser.SKIBIDI, 0); }
-		public TerminalNode TUAH() { return getToken(JavaRotParser.TUAH, 0); }
-		public TerminalNode IDENTIFIER() { return getToken(JavaRotParser.IDENTIFIER, 0); }
+		public TerminalNode TAX() { return getToken(JortParser.TAX, 0); }
+		public TerminalNode ONG() { return getToken(JortParser.ONG, 0); }
+		public TerminalNode GONE() { return getToken(JortParser.GONE, 0); }
+		public TerminalNode CHAT() { return getToken(JortParser.CHAT, 0); }
+		public TerminalNode SKIBIDI() { return getToken(JortParser.SKIBIDI, 0); }
+		public TerminalNode TUAH() { return getToken(JortParser.TUAH, 0); }
+		public TerminalNode IDENTIFIER() { return getToken(JortParser.IDENTIFIER, 0); }
 		public TypeContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_type; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).enterType(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).enterType(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitType(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).exitType(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitType(this);
+			if ( visitor instanceof JortVisitor) return ((JortVisitor<? extends T>)visitor).visitType(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -383,15 +383,15 @@ public class JavaRotParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_statement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).enterStatement(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).enterStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitStatement(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).exitStatement(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitStatement(this);
+			if ( visitor instanceof JortVisitor) return ((JortVisitor<? extends T>)visitor).visitStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -505,7 +505,7 @@ public class JavaRotParser extends Parser {
 		public TypeContext type() {
 			return getRuleContext(TypeContext.class,0);
 		}
-		public TerminalNode IDENTIFIER() { return getToken(JavaRotParser.IDENTIFIER, 0); }
+		public TerminalNode IDENTIFIER() { return getToken(JortParser.IDENTIFIER, 0); }
 		public BlockContext block() {
 			return getRuleContext(BlockContext.class,0);
 		}
@@ -518,15 +518,15 @@ public class JavaRotParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_methodDeclaration; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).enterMethodDeclaration(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).enterMethodDeclaration(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitMethodDeclaration(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).exitMethodDeclaration(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitMethodDeclaration(this);
+			if ( visitor instanceof JortVisitor) return ((JortVisitor<? extends T>)visitor).visitMethodDeclaration(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -579,9 +579,9 @@ public class JavaRotParser extends Parser {
 		public TypeContext type(int i) {
 			return getRuleContext(TypeContext.class,i);
 		}
-		public List<TerminalNode> IDENTIFIER() { return getTokens(JavaRotParser.IDENTIFIER); }
+		public List<TerminalNode> IDENTIFIER() { return getTokens(JortParser.IDENTIFIER); }
 		public TerminalNode IDENTIFIER(int i) {
-			return getToken(JavaRotParser.IDENTIFIER, i);
+			return getToken(JortParser.IDENTIFIER, i);
 		}
 		public ParameterListContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -589,15 +589,15 @@ public class JavaRotParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_parameterList; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).enterParameterList(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).enterParameterList(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitParameterList(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).exitParameterList(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitParameterList(this);
+			if ( visitor instanceof JortVisitor) return ((JortVisitor<? extends T>)visitor).visitParameterList(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -652,33 +652,33 @@ public class JavaRotParser extends Parser {
 		public TypeContext type(int i) {
 			return getRuleContext(TypeContext.class,i);
 		}
-		public TerminalNode IDENTIFIER() { return getToken(JavaRotParser.IDENTIFIER, 0); }
+		public TerminalNode IDENTIFIER() { return getToken(JortParser.IDENTIFIER, 0); }
 		public StatementEndContext statementEnd() {
 			return getRuleContext(StatementEndContext.class,0);
 		}
-		public TerminalNode TS() { return getToken(JavaRotParser.TS, 0); }
+		public TerminalNode TS() { return getToken(JortParser.TS, 0); }
 		public List<ExpressionContext> expression() {
 			return getRuleContexts(ExpressionContext.class);
 		}
 		public ExpressionContext expression(int i) {
 			return getRuleContext(ExpressionContext.class,i);
 		}
-		public TerminalNode NEW() { return getToken(JavaRotParser.NEW, 0); }
+		public TerminalNode NEW() { return getToken(JortParser.NEW, 0); }
 		public VariableDeclarationContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_variableDeclaration; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).enterVariableDeclaration(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).enterVariableDeclaration(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitVariableDeclaration(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).exitVariableDeclaration(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitVariableDeclaration(this);
+			if ( visitor instanceof JortVisitor) return ((JortVisitor<? extends T>)visitor).visitVariableDeclaration(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -767,14 +767,14 @@ public class JavaRotParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class AssignmentContext extends ParserRuleContext {
-		public TerminalNode TS() { return getToken(JavaRotParser.TS, 0); }
+		public TerminalNode TS() { return getToken(JortParser.TS, 0); }
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
 		}
 		public StatementEndContext statementEnd() {
 			return getRuleContext(StatementEndContext.class,0);
 		}
-		public TerminalNode IDENTIFIER() { return getToken(JavaRotParser.IDENTIFIER, 0); }
+		public TerminalNode IDENTIFIER() { return getToken(JortParser.IDENTIFIER, 0); }
 		public ArrayIndexContext arrayIndex() {
 			return getRuleContext(ArrayIndexContext.class,0);
 		}
@@ -784,15 +784,15 @@ public class JavaRotParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_assignment; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).enterAssignment(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).enterAssignment(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitAssignment(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).exitAssignment(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitAssignment(this);
+			if ( visitor instanceof JortVisitor) return ((JortVisitor<? extends T>)visitor).visitAssignment(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -840,7 +840,7 @@ public class JavaRotParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class ArrayIndexContext extends ParserRuleContext {
-		public TerminalNode IDENTIFIER() { return getToken(JavaRotParser.IDENTIFIER, 0); }
+		public TerminalNode IDENTIFIER() { return getToken(JortParser.IDENTIFIER, 0); }
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
 		}
@@ -850,15 +850,15 @@ public class JavaRotParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_arrayIndex; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).enterArrayIndex(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).enterArrayIndex(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitArrayIndex(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).exitArrayIndex(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitArrayIndex(this);
+			if ( visitor instanceof JortVisitor) return ((JortVisitor<? extends T>)visitor).visitArrayIndex(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -892,7 +892,7 @@ public class JavaRotParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class IfStatementContext extends ParserRuleContext {
-		public TerminalNode HUZZ() { return getToken(JavaRotParser.HUZZ, 0); }
+		public TerminalNode HUZZ() { return getToken(JortParser.HUZZ, 0); }
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
 		}
@@ -902,22 +902,22 @@ public class JavaRotParser extends Parser {
 		public BlockContext block(int i) {
 			return getRuleContext(BlockContext.class,i);
 		}
-		public TerminalNode BRUZZ() { return getToken(JavaRotParser.BRUZZ, 0); }
+		public TerminalNode BRUZZ() { return getToken(JortParser.BRUZZ, 0); }
 		public IfStatementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_ifStatement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).enterIfStatement(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).enterIfStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitIfStatement(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).exitIfStatement(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitIfStatement(this);
+			if ( visitor instanceof JortVisitor) return ((JortVisitor<? extends T>)visitor).visitIfStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -966,7 +966,7 @@ public class JavaRotParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class WhileStatementContext extends ParserRuleContext {
-		public TerminalNode EDGE() { return getToken(JavaRotParser.EDGE, 0); }
+		public TerminalNode EDGE() { return getToken(JortParser.EDGE, 0); }
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
 		}
@@ -979,15 +979,15 @@ public class JavaRotParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_whileStatement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).enterWhileStatement(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).enterWhileStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitWhileStatement(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).exitWhileStatement(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitWhileStatement(this);
+			if ( visitor instanceof JortVisitor) return ((JortVisitor<? extends T>)visitor).visitWhileStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1023,7 +1023,7 @@ public class JavaRotParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class ForStatementContext extends ParserRuleContext {
-		public TerminalNode GOON() { return getToken(JavaRotParser.GOON, 0); }
+		public TerminalNode GOON() { return getToken(JortParser.GOON, 0); }
 		public BlockContext block() {
 			return getRuleContext(BlockContext.class,0);
 		}
@@ -1045,15 +1045,15 @@ public class JavaRotParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_forStatement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).enterForStatement(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).enterForStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitForStatement(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).exitForStatement(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitForStatement(this);
+			if ( visitor instanceof JortVisitor) return ((JortVisitor<? extends T>)visitor).visitForStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1124,7 +1124,7 @@ public class JavaRotParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class ReturnStatementContext extends ParserRuleContext {
-		public TerminalNode JS_GIMME_MY_MONEY() { return getToken(JavaRotParser.JS_GIMME_MY_MONEY, 0); }
+		public TerminalNode JS_GIMME_MY_MONEY() { return getToken(JortParser.JS_GIMME_MY_MONEY, 0); }
 		public StatementEndContext statementEnd() {
 			return getRuleContext(StatementEndContext.class,0);
 		}
@@ -1137,15 +1137,15 @@ public class JavaRotParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_returnStatement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).enterReturnStatement(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).enterReturnStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitReturnStatement(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).exitReturnStatement(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitReturnStatement(this);
+			if ( visitor instanceof JortVisitor) return ((JortVisitor<? extends T>)visitor).visitReturnStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1186,7 +1186,7 @@ public class JavaRotParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class PrintStatementContext extends ParserRuleContext {
-		public TerminalNode PRNT() { return getToken(JavaRotParser.PRNT, 0); }
+		public TerminalNode PRNT() { return getToken(JortParser.PRNT, 0); }
 		public StatementEndContext statementEnd() {
 			return getRuleContext(StatementEndContext.class,0);
 		}
@@ -1199,15 +1199,15 @@ public class JavaRotParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_printStatement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).enterPrintStatement(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).enterPrintStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitPrintStatement(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).exitPrintStatement(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitPrintStatement(this);
+			if ( visitor instanceof JortVisitor) return ((JortVisitor<? extends T>)visitor).visitPrintStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1264,15 +1264,15 @@ public class JavaRotParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_expressionStatement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).enterExpressionStatement(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).enterExpressionStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitExpressionStatement(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).exitExpressionStatement(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitExpressionStatement(this);
+			if ( visitor instanceof JortVisitor) return ((JortVisitor<? extends T>)visitor).visitExpressionStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1302,7 +1302,7 @@ public class JavaRotParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class ExpressionContext extends ParserRuleContext {
-		public TerminalNode IDENTIFIER() { return getToken(JavaRotParser.IDENTIFIER, 0); }
+		public TerminalNode IDENTIFIER() { return getToken(JortParser.IDENTIFIER, 0); }
 		public ArgumentListContext argumentList() {
 			return getRuleContext(ArgumentListContext.class,0);
 		}
@@ -1315,13 +1315,13 @@ public class JavaRotParser extends Parser {
 		public ExpressionContext expression(int i) {
 			return getRuleContext(ExpressionContext.class,i);
 		}
-		public TerminalNode NEW() { return getToken(JavaRotParser.NEW, 0); }
+		public TerminalNode NEW() { return getToken(JortParser.NEW, 0); }
 		public TypeContext type() {
 			return getRuleContext(TypeContext.class,0);
 		}
-		public TerminalNode TS_NT() { return getToken(JavaRotParser.TS_NT, 0); }
-		public TerminalNode LONG_AHH() { return getToken(JavaRotParser.LONG_AHH, 0); }
-		public TerminalNode SMALL_AHH() { return getToken(JavaRotParser.SMALL_AHH, 0); }
+		public TerminalNode TS_NT() { return getToken(JortParser.TS_NT, 0); }
+		public TerminalNode LONG_AHH() { return getToken(JortParser.LONG_AHH, 0); }
+		public TerminalNode SMALL_AHH() { return getToken(JortParser.SMALL_AHH, 0); }
 		public OperatorContext operator() {
 			return getRuleContext(OperatorContext.class,0);
 		}
@@ -1331,15 +1331,15 @@ public class JavaRotParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_expression; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).enterExpression(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).enterExpression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitExpression(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).exitExpression(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitExpression(this);
+			if ( visitor instanceof JortVisitor) return ((JortVisitor<? extends T>)visitor).visitExpression(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1504,26 +1504,26 @@ public class JavaRotParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class LiteralContext extends ParserRuleContext {
-		public TerminalNode TAX_LITERAL() { return getToken(JavaRotParser.TAX_LITERAL, 0); }
-		public TerminalNode ONG_LITERAL() { return getToken(JavaRotParser.ONG_LITERAL, 0); }
-		public TerminalNode SKIBIDI_LITERAL() { return getToken(JavaRotParser.SKIBIDI_LITERAL, 0); }
-		public TerminalNode CHAT_LITERAL() { return getToken(JavaRotParser.CHAT_LITERAL, 0); }
-		public TerminalNode TUAH_LITERAL() { return getToken(JavaRotParser.TUAH_LITERAL, 0); }
+		public TerminalNode TAX_LITERAL() { return getToken(JortParser.TAX_LITERAL, 0); }
+		public TerminalNode ONG_LITERAL() { return getToken(JortParser.ONG_LITERAL, 0); }
+		public TerminalNode SKIBIDI_LITERAL() { return getToken(JortParser.SKIBIDI_LITERAL, 0); }
+		public TerminalNode CHAT_LITERAL() { return getToken(JortParser.CHAT_LITERAL, 0); }
+		public TerminalNode TUAH_LITERAL() { return getToken(JortParser.TUAH_LITERAL, 0); }
 		public LiteralContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_literal; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).enterLiteral(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).enterLiteral(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitLiteral(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).exitLiteral(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitLiteral(this);
+			if ( visitor instanceof JortVisitor) return ((JortVisitor<? extends T>)visitor).visitLiteral(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1560,34 +1560,34 @@ public class JavaRotParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class OperatorContext extends ParserRuleContext {
-		public TerminalNode ADD_TS() { return getToken(JavaRotParser.ADD_TS, 0); }
-		public TerminalNode SUB_TS() { return getToken(JavaRotParser.SUB_TS, 0); }
-		public TerminalNode MUL_TS() { return getToken(JavaRotParser.MUL_TS, 0); }
-		public TerminalNode DIV_TS() { return getToken(JavaRotParser.DIV_TS, 0); }
-		public TerminalNode MOD_TS() { return getToken(JavaRotParser.MOD_TS, 0); }
-		public TerminalNode TS_EQL() { return getToken(JavaRotParser.TS_EQL, 0); }
-		public TerminalNode TS_NOT_EQL() { return getToken(JavaRotParser.TS_NOT_EQL, 0); }
-		public TerminalNode TS_LES_OR_EQL() { return getToken(JavaRotParser.TS_LES_OR_EQL, 0); }
-		public TerminalNode TS_GRTR_OR_EQL() { return getToken(JavaRotParser.TS_GRTR_OR_EQL, 0); }
-		public TerminalNode TS_LES() { return getToken(JavaRotParser.TS_LES, 0); }
-		public TerminalNode TS_GRTR() { return getToken(JavaRotParser.TS_GRTR, 0); }
-		public TerminalNode ND() { return getToken(JavaRotParser.ND, 0); }
-		public TerminalNode OR() { return getToken(JavaRotParser.OR, 0); }
+		public TerminalNode ADD_TS() { return getToken(JortParser.ADD_TS, 0); }
+		public TerminalNode SUB_TS() { return getToken(JortParser.SUB_TS, 0); }
+		public TerminalNode MUL_TS() { return getToken(JortParser.MUL_TS, 0); }
+		public TerminalNode DIV_TS() { return getToken(JortParser.DIV_TS, 0); }
+		public TerminalNode MOD_TS() { return getToken(JortParser.MOD_TS, 0); }
+		public TerminalNode TS_EQL() { return getToken(JortParser.TS_EQL, 0); }
+		public TerminalNode TS_NOT_EQL() { return getToken(JortParser.TS_NOT_EQL, 0); }
+		public TerminalNode TS_LES_OR_EQL() { return getToken(JortParser.TS_LES_OR_EQL, 0); }
+		public TerminalNode TS_GRTR_OR_EQL() { return getToken(JortParser.TS_GRTR_OR_EQL, 0); }
+		public TerminalNode TS_LES() { return getToken(JortParser.TS_LES, 0); }
+		public TerminalNode TS_GRTR() { return getToken(JortParser.TS_GRTR, 0); }
+		public TerminalNode ND() { return getToken(JortParser.ND, 0); }
+		public TerminalNode OR() { return getToken(JortParser.OR, 0); }
 		public OperatorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_operator; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).enterOperator(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).enterOperator(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitOperator(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).exitOperator(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitOperator(this);
+			if ( visitor instanceof JortVisitor) return ((JortVisitor<? extends T>)visitor).visitOperator(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1636,15 +1636,15 @@ public class JavaRotParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_block; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).enterBlock(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).enterBlock(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitBlock(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).exitBlock(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitBlock(this);
+			if ( visitor instanceof JortVisitor) return ((JortVisitor<? extends T>)visitor).visitBlock(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1701,15 +1701,15 @@ public class JavaRotParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_argumentList; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).enterArgumentList(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).enterArgumentList(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitArgumentList(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).exitArgumentList(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitArgumentList(this);
+			if ( visitor instanceof JortVisitor) return ((JortVisitor<? extends T>)visitor).visitArgumentList(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1754,37 +1754,37 @@ public class JavaRotParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class TryCatchStatementContext extends ParserRuleContext {
-		public TerminalNode TS_GON_WRK() { return getToken(JavaRotParser.TS_GON_WRK, 0); }
+		public TerminalNode TS_GON_WRK() { return getToken(JortParser.TS_GON_WRK, 0); }
 		public List<BlockContext> block() {
 			return getRuleContexts(BlockContext.class);
 		}
 		public BlockContext block(int i) {
 			return getRuleContext(BlockContext.class,i);
 		}
-		public List<TerminalNode> TS_PMO_GNG() { return getTokens(JavaRotParser.TS_PMO_GNG); }
+		public List<TerminalNode> TS_PMO_GNG() { return getTokens(JortParser.TS_PMO_GNG); }
 		public TerminalNode TS_PMO_GNG(int i) {
-			return getToken(JavaRotParser.TS_PMO_GNG, i);
+			return getToken(JortParser.TS_PMO_GNG, i);
 		}
-		public List<TerminalNode> IDENTIFIER() { return getTokens(JavaRotParser.IDENTIFIER); }
+		public List<TerminalNode> IDENTIFIER() { return getTokens(JortParser.IDENTIFIER); }
 		public TerminalNode IDENTIFIER(int i) {
-			return getToken(JavaRotParser.IDENTIFIER, i);
+			return getToken(JortParser.IDENTIFIER, i);
 		}
-		public TerminalNode FNLY() { return getToken(JavaRotParser.FNLY, 0); }
+		public TerminalNode FNLY() { return getToken(JortParser.FNLY, 0); }
 		public TryCatchStatementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_tryCatchStatement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).enterTryCatchStatement(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).enterTryCatchStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitTryCatchStatement(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).exitTryCatchStatement(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitTryCatchStatement(this);
+			if ( visitor instanceof JortVisitor) return ((JortVisitor<? extends T>)visitor).visitTryCatchStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1849,7 +1849,7 @@ public class JavaRotParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class BreakStatementContext extends ParserRuleContext {
-		public TerminalNode SYBAU() { return getToken(JavaRotParser.SYBAU, 0); }
+		public TerminalNode SYBAU() { return getToken(JortParser.SYBAU, 0); }
 		public StatementEndContext statementEnd() {
 			return getRuleContext(StatementEndContext.class,0);
 		}
@@ -1859,15 +1859,15 @@ public class JavaRotParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_breakStatement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).enterBreakStatement(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).enterBreakStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitBreakStatement(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).exitBreakStatement(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitBreakStatement(this);
+			if ( visitor instanceof JortVisitor) return ((JortVisitor<? extends T>)visitor).visitBreakStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1897,7 +1897,7 @@ public class JavaRotParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class ContinueStatementContext extends ParserRuleContext {
-		public TerminalNode GO_ON() { return getToken(JavaRotParser.GO_ON, 0); }
+		public TerminalNode GO_ON() { return getToken(JortParser.GO_ON, 0); }
 		public StatementEndContext statementEnd() {
 			return getRuleContext(StatementEndContext.class,0);
 		}
@@ -1907,15 +1907,15 @@ public class JavaRotParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_continueStatement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).enterContinueStatement(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).enterContinueStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitContinueStatement(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).exitContinueStatement(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitContinueStatement(this);
+			if ( visitor instanceof JortVisitor) return ((JortVisitor<? extends T>)visitor).visitContinueStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1945,23 +1945,23 @@ public class JavaRotParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class StatementEndContext extends ParserRuleContext {
-		public TerminalNode SEMI() { return getToken(JavaRotParser.SEMI, 0); }
-		public TerminalNode PMO_HEART() { return getToken(JavaRotParser.PMO_HEART, 0); }
+		public TerminalNode SEMI() { return getToken(JortParser.SEMI, 0); }
+		public TerminalNode PMO_HEART() { return getToken(JortParser.PMO_HEART, 0); }
 		public StatementEndContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_statementEnd; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).enterStatementEnd(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).enterStatementEnd(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof JavaRotListener ) ((JavaRotListener)listener).exitStatementEnd(this);
+			if ( listener instanceof JortListener ) ((JortListener)listener).exitStatementEnd(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof JavaRotVisitor) return ((JavaRotVisitor<? extends T>)visitor).visitStatementEnd(this);
+			if ( visitor instanceof JortVisitor) return ((JortVisitor<? extends T>)visitor).visitStatementEnd(this);
 			else return visitor.visitChildren(this);
 		}
 	}

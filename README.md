@@ -1,4 +1,6 @@
-![image_2025-03-05_170118542-removebg-preview](https://github.com/user-attachments/assets/d33e69ef-a908-4d50-b18c-5487a362cf60)
+![image-removebg-preview](https://github.com/user-attachments/assets/3d9a9306-1b1e-4868-bdc4-915ab982b198)
+
+
 
 # Jort
 Jort is a functionally complete[^1] programming language, whose syntax is made up of internet slang/gen-z lingo, it is **NOT** meant for practical use, and was created for fun. Currently i use ANTLR to generate a lexer and parser for the language which translates the language to java code.
